@@ -1,0 +1,34 @@
+Definitions hold the data and stats for teams, players, seasons, and so on.
+
+Classes:
+
+Season - Data regarding the current season.
+* Standings
+* Schedule
+* Team Seasonal Stats
+* Current Week
+* Completed Games
+
+League - Data regarding the League in general. I
+* List of Teams
+* League-Wide Rules
+* Season History
+* GLobal Settings
+
+Team - Data regarding information for the team this season.
+* Players
+* Team-Level Stats
+* Record
+* Strategy Profile
+
+Player - Data and stats regarding information for the player this season.
+* Attributes
+* Current Season Stats
+* Fatigue State
+* Injury State
+
+Game - Data and stats regarding information for a single game.
+* Score
+* Time
+* Events Log
+* Player Stats
