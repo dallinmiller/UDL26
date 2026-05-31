@@ -19,11 +19,18 @@ def game_control(league, season):
     all_paths = [menus, schedule_screens]
 
     UI_state = "main"
+    path_exists = False
     processing = False
 
     while True:
         for path in all_paths:
             if UI_state in path:
-                UI_state = path[UI_state]
-            else:
-                raise ValueError("Unidentified path")
+                path_exists = True
+                UI_state = path[UI_state]()
+        if UI_state == "quit":
+            break
+        if not path_exists:
+            raise ValueError("Path not found")
+
+        path_exists = False
+

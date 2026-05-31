@@ -7,7 +7,7 @@ def print_schedule(season):
 
         for game in week:
             week_table.append(
-                ["", game.home_team, "vs", game.away_team]
+                ["", game.home_team.city, "vs", game.away_team.city]
             )
 
         headers = [f"Week {week_number}", "Home Team", "", "Away Team"]
@@ -15,6 +15,7 @@ def print_schedule(season):
 
     print("\n\n")
     get_continue()
+    return "schedule"
 
     
 def print_week(season):
@@ -28,7 +29,7 @@ def print_week(season):
 
     for game in season.season_schedule[week - 1]:
         week_table.append(
-            ["", game.home_team, "vs", game.away_team]
+            ["", game.home_team.city, "vs", game.away_team.city]
         )
 
     headers = [f"Week {week}", "Home Team", "", "Away Team"]
@@ -36,6 +37,7 @@ def print_week(season):
 
     print("\n\n")
     get_continue()
+    return "schedule"
 
 
 def find_schedule(season, team):
@@ -60,7 +62,7 @@ def print_match(season, team):
     for game in season.season_schedule[week - 1]:
         if game.home_team == team or game.away_team == team:
             week_table.append(
-                ["", game.home_team, "vs", game.away_team]
+                ["", game.home_team.city, "vs", game.away_team.city]
             )
 
     headers = [f"Week {week}", "Home Team", "", "Away Team"]
@@ -68,16 +70,17 @@ def print_match(season, team):
 
     print("\n\n")
     get_continue()
+    return "schedule"
 
 
-def print_team(schedule, team):
+def print_team(season, team):
     week_table = []
 
-    for week_number, week in enumerate(schedule, start=1):
+    for week_number, week in enumerate(season.season_schedule, start=1):
         for game in week:
             if game.home_team == team or game.away_team == team:
                 week_table.append(
-                    [f"Week {week_number}", game.home_team, "vs", game.away_team]
+                    ["", game.home_team.city, "vs", game.away_team.city]
                 )
 
     headers = ["Week", "Home Team", "", "Away Team"]
@@ -85,9 +88,10 @@ def print_team(schedule, team):
 
     print("\n\n")
     get_continue()
+    return "schedule"
 
 def print_results(season):
-    for week_number, week in enumerate(season.all_results, start=1):
+    for week_number, week in enumerate(season.season_results, start=1):
 
         week_table = []
 
@@ -96,18 +100,18 @@ def print_results(season):
                 week_table.append([
                     "",
                     f"{game.home_score}",
-                    game.home_team,
+                    game.home_team.city,
                     "vs",
-                    game.away_team,
+                    game.away_team.city,
                     f"{game.away_score}"
                 ])
             else:
                 week_table.append([
                     "",
                     "-",
-                    game.home_team,
+                    game.home_team.city,
                     "vs",
-                    game.away_team,
+                    game.away_team.city,
                     "-"
                 ])
 
@@ -116,4 +120,5 @@ def print_results(season):
         print("\n\n")
 
     get_continue()
+    return "schedule"
 
