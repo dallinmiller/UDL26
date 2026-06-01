@@ -25,3 +25,17 @@ class Team:
 
     def return_score_differential(self):
         return self.total_points - self.opponent_points
+
+    def update_stats(self, win, points, op_points):
+        if win:
+            self.wins += 1
+        else:
+            self.losses += 1
+        self.total_points += points
+        self.opponent_points += op_points
+
+    def return_stats(self):
+        total_games = self.wins + self.losses
+        return (self.wins, self.losses, self.total_points, (self.total_points/total_games if total_games > 0 else 0),
+                self.opponent_points, (self.opponent_points/total_games if total_games > 0 else 0),
+                self.total_points - self.opponent_points)

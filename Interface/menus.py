@@ -5,7 +5,7 @@ def main_menu():
         ("Schedule Menu", "schedule"),
         ("Admin Menu", "admin"),
         ("Standings", "standings"),
-        ("Statistics", "statistics"),
+        ("Statistics", "stats"),
         ("Next Game", "next_game"),
         ("Archive", "archive"),
         ("Quit", "quit")
@@ -54,6 +54,22 @@ def standings_menu():
         ("Full Standings", "full_standings"),
         ("Division Standings", "division_standings"),
         ("Conference Standings", "conference_standings"),
+        ("Back", "main")
+    ]
+
+    labels = [label for label, _ in options]
+
+    choice = create_menu("Select an Option", labels)
+
+    clear_screen()
+
+    return options[choice - 1][1]
+
+def stats_menu():
+    options = [
+        ("User Stats", "user_stats"),
+        ("Full Stats", "full_stats"),
+        ("Single Team Stats", "single_team_stats"),
         ("Back", "main")
     ]
 
