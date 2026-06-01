@@ -22,3 +22,6 @@ class Team:
 
     def update_win_loss(self):
         self.win_loss = self.wins - self.losses
+
+    def return_score_differential(self):
+        return self.total_points - self.opponent_points

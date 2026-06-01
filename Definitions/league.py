@@ -19,6 +19,8 @@ class League:
 
         self.all_teams = self.divisions["front"] + self.divisions["back"]
 
+        self.standings_sorted = True
+
         self.playoff_teams = []
         self.p_c_s = []  # Shortened For Readability: Playoff Conference Semis
         self.p_c_s_w = "___", "___", "___", "___"  # Playoff Conference Semis Winners

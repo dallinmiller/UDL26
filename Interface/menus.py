@@ -48,3 +48,19 @@ def admin_menu():
     clear_screen()
 
     return options[choice - 1][1]
+
+def standings_menu():
+    options = [
+        ("Full Standings", "full_standings"),
+        ("Division Standings", "division_standings"),
+        ("Conference Standings", "conference_standings"),
+        ("Back", "main")
+    ]
+
+    labels = [label for label, _ in options]
+
+    choice = create_menu("Select an Option", labels)
+
+    clear_screen()
+
+    return options[choice - 1][1]
