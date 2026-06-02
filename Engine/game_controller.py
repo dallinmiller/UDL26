@@ -93,7 +93,7 @@ def game_control(league, season):
         "sim_week": lambda: weekly_update(league, season),
         "playoff_init": lambda: playoff_initialization(league, season),
         "sim_week_playoff": lambda: weekly_update_playoff(league, season),
-        "end_season": lambda: initialize_new_season()
+        "end_season": lambda: initialize_new_season(league, season)
     }
 
     test = {
@@ -103,7 +103,7 @@ def game_control(league, season):
     all_paths = [menus, schedule_screens, admin_screens, standings_screens, statistics_screens, playoff_screens,
                  playoff_admin_screens, playoff_standings_screens, playoff_stats_screens]
 
-    UI_state = "playoff_test"
+    UI_state = "main"
     path_exists = False
 
     while True:
@@ -121,6 +121,7 @@ def game_control(league, season):
         if not path_exists:
             raise ValueError("Path not found")
 
+        # Set UI_state to "playoff_test" to skip regular season
         if UI_state in test:
             if season.playoff:
                 UI_state = "playoff_init"

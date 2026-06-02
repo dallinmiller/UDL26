@@ -1,11 +1,13 @@
 # Team class: Stores players and team information
 class Team:
     def __init__(self, city_name, team_name, conference, division, user=False):
+        self.team_history = None
         self.user = user
         self.city = city_name
         self.name = team_name
         self.conference = conference
         self.division = division
+        self.league_index = 0
         self.prestige = 1
         self.season_status = "calm"
         self.game_status = "calm"

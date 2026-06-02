@@ -1,4 +1,5 @@
 from Definitions.team import Team
+from History.histories import TeamHistory
 
 # Initializes teams for a specific league.
 def initialize_teams():
@@ -23,5 +24,10 @@ def initialize_teams():
         alabama, alaska, arizona, arkansas, colorado, hawaii, louisiana, missouri, minnesota, nevada, new_hampshire,
         new_jersey, oregon, rhode_island, utah, wyoming
     ]
+
+    for i, team in enumerate(teams, start=0):
+        team.league_index = i
+        team.team_history = TeamHistory(team.city, team.name, team.league_index)
+
 
     return teams
