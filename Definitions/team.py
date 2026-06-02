@@ -6,6 +6,7 @@ class Team:
         self.name = team_name
         self.conference = conference
         self.division = division
+        self.prestige = 1
         self.season_status = "calm"
         self.game_status = "calm"
         self.wins = 0
@@ -25,14 +26,6 @@ class Team:
 
     def return_score_differential(self):
         return self.total_points - self.opponent_points
-
-    def update_stats(self, win, points, op_points):
-        if win:
-            self.wins += 1
-        else:
-            self.losses += 1
-        self.total_points += points
-        self.opponent_points += op_points
 
     def return_stats(self):
         total_games = self.wins + self.losses

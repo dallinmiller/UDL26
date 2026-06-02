@@ -14,8 +14,8 @@ def update_process(grouping):
 def update_standings(league):
     conferences = [league.conferences["aac"], league.conferences["cmc"], league.conferences["mnc"],
                    league.conferences["owc"]]
-    league.update_process(conferences)
+    update_process(conferences)
     divisions = [league.divisions["front"], league.divisions["back"]]
-    league.update_process(divisions)
+    update_process(divisions)
     whole_league = [league.all_teams]
-    league.update_process(whole_league)
+    update_process(whole_league)

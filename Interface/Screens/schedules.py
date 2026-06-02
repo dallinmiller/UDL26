@@ -7,7 +7,8 @@ def print_schedule(season):
 
         for game in week:
             week_table.append(
-                ["", game.home_team.city, "vs", game.away_team.city]
+                [game.match_time if game.match_time != "Time not set" else "",
+                 game.home_team.city, "vs", game.away_team.city]
             )
 
         headers = [f"Week {week_number}", "Home Team", "", "Away Team"]
@@ -29,7 +30,8 @@ def print_week(season):
 
     for game in season.season_schedule[week - 1]:
         week_table.append(
-            ["", game.home_team.city, "vs", game.away_team.city]
+            [game.match_time if game.match_time != "Time not set" else "",
+             game.home_team.city, "vs", game.away_team.city]
         )
 
     headers = [f"Week {week}", "Home Team", "", "Away Team"]
@@ -39,6 +41,21 @@ def print_week(season):
     get_continue()
     return "schedule"
 
+def upcoming_week(season):
+    week_table = []
+
+    for game in season.season_schedule[season.week - 1]:
+        week_table.append(
+            [game.match_time if game.match_time != "Time not set" else "",
+             game.home_team.city, "vs", game.away_team.city]
+        )
+
+    headers = [f"Week {season.week}", "Home Team", "", "Away Team"]
+    print(tabulate(week_table, headers=headers, tablefmt="grid"))
+
+    print("\n\n")
+    get_continue()
+    return "schedule"
 
 def find_schedule(season, team):
     team_schedule = []
@@ -62,7 +79,8 @@ def print_match(season, team):
     for game in season.season_schedule[week - 1]:
         if game.home_team == team or game.away_team == team:
             week_table.append(
-                ["", game.home_team.city, "vs", game.away_team.city]
+                [game.match_time if game.match_time != "Time not set" else "",
+                 game.home_team.city, "vs", game.away_team.city]
             )
 
     headers = [f"Week {week}", "Home Team", "", "Away Team"]
@@ -80,7 +98,8 @@ def print_team(season, team):
         for game in week:
             if game.home_team == team or game.away_team == team:
                 week_table.append(
-                    ["", game.home_team.city, "vs", game.away_team.city]
+                    [game.match_time if game.match_time != "Time not set" else "",
+                     game.home_team.city, "vs", game.away_team.city]
                 )
 
     headers = ["Week", "Home Team", "", "Away Team"]
@@ -98,16 +117,16 @@ def print_results(season):
         for game in week:
             if game.played:
                 week_table.append([
-                    "",
-                    f"{game.home_score}",
+                    game.match_time if game.match_time != "Time not set" else "",
+                    f"{game.score_home}",
                     game.home_team.city,
                     "vs",
                     game.away_team.city,
-                    f"{game.away_score}"
+                    f"{game.score_away}"
                 ])
             else:
                 week_table.append([
-                    "",
+                    game.match_time if game.match_time != "Time not set" else "",
                     "-",
                     game.home_team.city,
                     "vs",
@@ -122,3 +141,32 @@ def print_results(season):
     get_continue()
     return "schedule"
 
+def print_weekly_results(season, UI_next="schedule"):
+    week_table = []
+
+    for game in season.season_results[season.week - 2]:
+        if game.played:
+            week_table.append([
+                game.match_time if game.match_time != "Time not set" else "",
+                f"{game.score_home}",
+                game.home_team.city,
+                "vs",
+                game.away_team.city,
+                f"{game.score_away}"
+            ])
+        else:
+            week_table.append([
+                game.match_time if game.match_time != "Time not set" else "",
+                "-",
+                game.home_team.city,
+                "vs",
+                game.away_team.city,
+                "-"
+            ])
+
+    headers = [f"Week {season.week - 1}", "", "Home Team", "", "Away Team", ""]
+    print(tabulate(week_table, headers=headers, tablefmt="grid"))
+    print("\n\n")
+
+    get_continue()
+    return UI_next

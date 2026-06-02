@@ -6,7 +6,7 @@ def main_menu():
         ("Admin Menu", "admin"),
         ("Standings", "standings"),
         ("Statistics", "stats"),
-        ("Next Game", "next_game"),
+        ("Next Game", "sim_week"),
         ("Archive", "archive"),
         ("Quit", "quit")
     ]
@@ -22,7 +22,8 @@ def main_menu():
 def schedule_menu():
     options = [
         ("Season Schedule", "season_schedule"),
-        ("Week Schedule", "week_schedule"),
+        ("Upcoming Week", "upcoming_schedule"),
+        ("Choose a Week", "week_schedule"),
         ("Team Schedule", "team_schedule"),
         ("Results", "results"),
         ("Back", "main")
@@ -38,6 +39,7 @@ def schedule_menu():
 
 def admin_menu():
     options = [
+        ("Season Status", "season_status"),
         ("Back", "main")
     ]
 
@@ -70,6 +72,19 @@ def stats_menu():
         ("User Stats", "user_stats"),
         ("Full Stats", "full_stats"),
         ("Single Team Stats", "single_team_stats"),
+        ("Back", "main")
+    ]
+
+    labels = [label for label, _ in options]
+
+    choice = create_menu("Select an Option", labels)
+
+    clear_screen()
+
+    return options[choice - 1][1]
+
+def archive_menu():
+    options = [
         ("Back", "main")
     ]
 

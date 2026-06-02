@@ -1,15 +1,9 @@
-from Interface.utility_functions import create_menu, get_continue, clear_screen
+from Interface.utility_functions import get_continue, clear_screen
+from Engine.Processes.general_processes import *
+from Engine.Processes.statistic_calculation import *
 from tabulate import tabulate
 
 stat_names = ["Team", "W", "L", "P", "PPG", "OP", "OPPG", "PD"]
-
-def find_team(league):
-    names = []
-    for i in league.league:
-        names.append(f"{i.city} {i.name}")
-    team_number = create_menu("Select a Team", names)
-    team_choice = league.league[team_number - 1]
-    return team_choice
 
 
 def single_team_stats(team):
@@ -21,24 +15,6 @@ def single_team_stats(team):
 
     get_continue()
     return "stats"
-
-
-def master_stats_return(league):
-    stats_table = []
-    for team in league.all_teams:
-        a, b, c, d, e, f, g = team.return_stats()
-        stats_table.append([f"{team.city} {team.name}", a, b, c, d, e, f, g])
-
-    return stats_table
-
-
-def master_stats_return_team(league):
-    stats_table = []
-    for team in league.all_teams:
-        a, b, c, d, e, f, g = team.return_stats()
-        stats_table.append([team, a, b, c, d, e, f, g])
-
-    return stats_table
 
 
 def master_stats(league, sorting_index):
