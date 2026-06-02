@@ -12,7 +12,7 @@ def initialize_teams():
     missouri = Team("Missouri", "Swamp", "CMC", "Front")
     minnesota = Team("Minnesota", "Ice", "MNC", "Back")
     nevada = Team("Nevada", "Nights", "MNC", "Back")
-    new_hampshire = Team("Mew Hampshire", "North", "MNC", "Back")
+    new_hampshire = Team("New Hampshire", "North", "MNC", "Back")
     new_jersey = Team("New Jersey", "Colonials", "MNC", "Back")
     oregon = Team("Oregon", "Outlaws", "OWC", "Back")
     rhode_island = Team("Rhode Island", "Gerbils", "OWC", "Back")

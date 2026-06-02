@@ -118,6 +118,26 @@ def create_schedule(league, season):
 
     return schedule
 
+def conference_division_locater(league, team, conf_or_div="conf"):
+    if conf_or_div == "conf":
+        if team in league.conferences["aac"]:
+            return 0
+        elif team in league.conferences["cmc"]:
+            return 1
+        elif team in league.conferences["mnc"]:
+            return 2
+        elif team in league.conferences["owc"]:
+            return 3
+        else:
+            raise ValueError(f"Unknown team {team.city}")
+    else:
+        if team in league.divisions["front"]:
+            return 0
+        elif team in league.divisions["back"]:
+            return 1
+        else:
+            raise ValueError(f"Unknown team {team.city}")
+
 def create_conference_semis_schedule(league, season):
     conference_semis_schedule = []
 
@@ -139,15 +159,17 @@ def create_conference_finals_schedule(league, season):
 
     for game in season.playoff_schedule[0]:
         if game.winner == "home":
-            conference_semifinal_winners.append(game.home_team)
+            conference_semifinal_winners.append([game.home_team, conference_division_locater(league, game.home_team)])
         else:
-            conference_semifinal_winners.append(game.away_team)
+            conference_semifinal_winners.append([game.away_team, conference_division_locater(league, game.home_team)])
+
+    conference_semifinal_winners.sort(key=lambda x: x[1])
 
     league.conference_final_teams = league.playoff_teams
-    league.conference_final_teams["aac"] = [league.playoff_teams["aac"][0], conference_semifinal_winners[0]]
-    league.conference_final_teams["cmc"] = [league.playoff_teams["cmc"][0], conference_semifinal_winners[1]]
-    league.conference_final_teams["mnc"] = [league.playoff_teams["mnc"][0], conference_semifinal_winners[2]]
-    league.conference_final_teams["owc"] = [league.playoff_teams["owc"][0], conference_semifinal_winners[3]]
+    league.conference_final_teams["aac"] = [league.playoff_teams["aac"][0], conference_semifinal_winners[0][0]]
+    league.conference_final_teams["cmc"] = [league.playoff_teams["cmc"][0], conference_semifinal_winners[1][0]]
+    league.conference_final_teams["mnc"] = [league.playoff_teams["mnc"][0], conference_semifinal_winners[2][0]]
+    league.conference_final_teams["owc"] = [league.playoff_teams["owc"][0], conference_semifinal_winners[3][0]]
     
     for conference in league.conference_final_teams.values():
         conference_finals_schedule.append(
@@ -165,13 +187,15 @@ def create_semifinals_schedule(league, season):
 
     for game in season.playoff_schedule[1]:
         if game.winner == "home":
-            conference_final_winners.append(game.home_team)
+            conference_final_winners.append([game.home_team, conference_division_locater(league, game.home_team)])
         else:
-            conference_final_winners.append(game.away_team)
+            conference_final_winners.append([game.away_team, conference_division_locater(league, game.home_team)])
+
+    conference_final_winners.sort(key=lambda x: x[1])
             
     league.semifinal_teams = {
-        "front": [conference_final_winners[0], conference_final_winners[1]],
-        "back": [conference_final_winners[2], conference_final_winners[3]]
+        "front": [conference_final_winners[0][0], conference_final_winners[1][0]],
+        "back": [conference_final_winners[2][0], conference_final_winners[3][0]]
     }
     
     for division in league.semifinal_teams.values():
@@ -184,7 +208,7 @@ def create_semifinals_schedule(league, season):
                 semifinals_schedule.append(
                     Game(division[1], division[0], league.return_game_id())
                 )
-        if division[0].wins > division[1].wins:
+        elif division[0].wins > division[1].wins:
             semifinals_schedule.append(
                 Game(division[0], division[1], league.return_game_id())
             )
@@ -192,7 +216,10 @@ def create_semifinals_schedule(league, season):
             semifinals_schedule.append(
                 Game(division[1], division[0], league.return_game_id())
             )
-            
+
+    for game in semifinals_schedule:
+        game.playoff = True
+
     season.playoff_schedule.append(semifinals_schedule)
     
 def create_finals_schedule(league, season):
@@ -217,7 +244,7 @@ def create_finals_schedule(league, season):
             final_game.append(
                 Game(league.final_teams[1], league.final_teams[0], league.return_game_id())
             )
-    if league.final_teams[0].wins > league.final_teams[1].wins:
+    elif league.final_teams[0].wins > league.final_teams[1].wins:
         final_game.append(
             Game(league.final_teams[0], league.final_teams[1], league.return_game_id())
         )

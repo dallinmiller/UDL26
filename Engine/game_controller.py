@@ -67,8 +67,8 @@ def game_control(league, season):
         "week_schedule_playoff": lambda: print_week(season, "playoff_schedule"),
         "team_schedule_playoff": lambda: print_team(season, league.user_team, "playoff_schedule"),
         "results_playoff": lambda: print_results(season, "playoff_schedule"),
-        "playoff_results_new": lambda: print_schedule_playoff(season, "playoff"),
-        "playoff_results_final": lambda:print_schedule_playoff(season, "end_season"),
+        "playoff_results_new": lambda: print_weekly_results_playoff(season, "playoff"),
+        "playoff_results_final": lambda:print_weekly_results_playoff(season, "end_season"),
     }
 
     playoff_admin_screens = {

@@ -73,3 +73,35 @@ def print_results_playoff(season):
 
     get_continue()
     return "playoff_schedule"
+
+def print_weekly_results_playoff(season, UI_next="playoff_schedule"):
+    week_table = []
+
+    for game in season.playoff_results[season.playoff_week - 2]:
+        if game.played:
+            week_table.append([
+                game.match_time if game.match_time != "Time not set" else "",
+                f"{game.score_home}",
+                game.home_team.city,
+                "vs",
+                game.away_team.city,
+                f"{game.score_away}"
+            ])
+        else:
+            week_table.append([
+                game.match_time if game.match_time != "Time not set" else "",
+                "-",
+                game.home_team.city,
+                "vs",
+                game.away_team.city,
+                "-"
+            ])
+
+    headers = [f"{week_names[season.playoff_week - 2]}", "", "Home Team", "", "Away Team", ""]
+    print(tabulate(week_table, headers=headers, tablefmt="grid"))
+    print("\n\n")
+
+
+
+    get_continue()
+    return UI_next

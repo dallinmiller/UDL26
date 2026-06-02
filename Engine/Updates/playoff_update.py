@@ -18,7 +18,7 @@ def team_updates_playoff(game):
     game.away_team.playoff_opponent_points += game.score_home
 
 def season_update_playoff(season):
-    if season.playoff_week < 3:
+    if season.playoff_week < 4:
         season.playoff_results.append(season.playoff_schedule[season.playoff_week - 1])
         season.playoff_week += 1
     else:
