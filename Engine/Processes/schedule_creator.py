@@ -117,3 +117,123 @@ def create_schedule(league, season):
     random.shuffle(schedule)
 
     return schedule
+
+def create_conference_semis_schedule(league, season):
+    conference_semis_schedule = []
+
+    for conference in league.playoff_teams.values():
+        conference_semis_schedule.append(
+            Game(conference[1], conference[2], league.return_game_id())
+        )
+
+    for game in conference_semis_schedule:
+        game.playoff = True
+        game.home_team.playoff_semis = True
+        game.away_team.playoff_semis = True
+
+    season.playoff_schedule.append(conference_semis_schedule)
+
+def create_conference_finals_schedule(league, season):
+    conference_finals_schedule = []
+    conference_semifinal_winners = []
+
+    for game in season.playoff_schedule[0]:
+        if game.winner == "home":
+            conference_semifinal_winners.append(game.home_team)
+        else:
+            conference_semifinal_winners.append(game.away_team)
+
+    league.conference_final_teams = league.playoff_teams
+    league.conference_final_teams["aac"] = [league.playoff_teams["aac"][0], conference_semifinal_winners[0]]
+    league.conference_final_teams["cmc"] = [league.playoff_teams["cmc"][0], conference_semifinal_winners[1]]
+    league.conference_final_teams["mnc"] = [league.playoff_teams["mnc"][0], conference_semifinal_winners[2]]
+    league.conference_final_teams["owc"] = [league.playoff_teams["owc"][0], conference_semifinal_winners[3]]
+    
+    for conference in league.conference_final_teams.values():
+        conference_finals_schedule.append(
+            Game(conference[0], conference[1], league.return_game_id())
+        )
+    
+    for game in conference_finals_schedule:
+        game.playoff = True
+        
+    season.playoff_schedule.append(conference_finals_schedule)
+    
+def create_semifinals_schedule(league, season):
+    semifinals_schedule = []
+    conference_final_winners = []
+
+    for game in season.playoff_schedule[1]:
+        if game.winner == "home":
+            conference_final_winners.append(game.home_team)
+        else:
+            conference_final_winners.append(game.away_team)
+            
+    league.semifinal_teams = {
+        "front": [conference_final_winners[0], conference_final_winners[1]],
+        "back": [conference_final_winners[2], conference_final_winners[3]]
+    }
+    
+    for division in league.semifinal_teams.values():
+        if division[0].wins == division[1].wins:
+            if (division[0].total_points - division[0].opponent_points) > (division[1].total_points - division[1].opponent_points):
+                semifinals_schedule.append(
+                    Game(division[0], division[1], league.return_game_id())
+                )
+            else:
+                semifinals_schedule.append(
+                    Game(division[1], division[0], league.return_game_id())
+                )
+        if division[0].wins > division[1].wins:
+            semifinals_schedule.append(
+                Game(division[0], division[1], league.return_game_id())
+            )
+        else:
+            semifinals_schedule.append(
+                Game(division[1], division[0], league.return_game_id())
+            )
+            
+    season.playoff_schedule.append(semifinals_schedule)
+    
+def create_finals_schedule(league, season):
+    final_game = []
+    conference_finals_winners = []
+    
+    for game in season.playoff_schedule[2]:
+        if game.winner == "home":
+            conference_finals_winners.append(game.home_team)
+        else:
+            conference_finals_winners.append(game.away_team)
+
+    league.final_teams = conference_finals_winners
+
+    if league.final_teams[0].wins == league.final_teams[1].wins:
+        if (league.final_teams[0].total_points - league.final_teams[0].opponent_points) > (
+                league.final_teams[1].total_points - league.final_teams[1].opponent_points):
+            final_game.append(
+                Game(league.final_teams[0], league.final_teams[1], league.return_game_id())
+            )
+        else:
+            final_game.append(
+                Game(league.final_teams[1], league.final_teams[0], league.return_game_id())
+            )
+    if league.final_teams[0].wins > league.final_teams[1].wins:
+        final_game.append(
+            Game(league.final_teams[0], league.final_teams[1], league.return_game_id())
+        )
+    else:
+        final_game.append(
+            Game(league.final_teams[1], league.final_teams[0], league.return_game_id())
+        )
+
+    potential_times = ["4:00", "5:00", "6:00", "7:00"]
+
+    final_game[0].match_time = random.choice(potential_times)
+
+    season.playoff_schedule.append(final_game)
+
+def crown_champion(league, season):
+    if season.playoff_schedule[3][0].winner == "home":
+        league.champion = season.playoff_schedule[3][0].home_team
+    else:
+        league.champion = season.playoff_schedule[3][0].away_team

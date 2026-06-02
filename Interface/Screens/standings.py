@@ -1,7 +1,7 @@
 from Interface.utility_functions import get_continue
 from tabulate import tabulate
 
-def print_standings(league):
+def print_standings(league, UI_next="standings"):
     standings_table = []
     all_teams = league.all_teams
     standings_table.append(["", "", "", "", ""])
@@ -14,10 +14,10 @@ def print_standings(league):
     print("\n\n")
 
     get_continue()
-    return "standings"
+    return UI_next
 
 
-def print_division_standings(league):
+def print_division_standings(league, UI_next="standings"):
     standings_table = []
     divisions = [league.divisions["front"], league.divisions["back"]]
     division_names = ["Front", "Back"]
@@ -33,10 +33,10 @@ def print_division_standings(league):
     print("\n\n")
 
     get_continue()
-    return "standings"
+    return UI_next
 
 
-def print_conference_standings(league):
+def print_conference_standings(league, UI_next="standings"):
     standings_table = []
     conferences = [league.conferences["aac"], league.conferences["cmc"], league.conferences["mnc"],
                    league.conferences["owc"]]
@@ -53,4 +53,4 @@ def print_conference_standings(league):
     print("\n\n")
 
     get_continue()
-    return "standings"
+    return UI_next

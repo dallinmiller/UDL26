@@ -21,14 +21,11 @@ class League:
 
         self.standings_sorted = True
 
-        self.playoff_teams = []
-        self.p_c_s = []  # Shortened For Readability: Playoff Conference Semis
-        self.p_c_s_w = "___", "___", "___", "___"  # Playoff Conference Semis Winners
-        self.p_c_f_w = "___", "___", "___", "___"  # Playoff Conference Finals Winners
-        self.p_s_w = "___", "___"  # Playoff Semi Winners
-        self.p_f_w = "___"
-
-        self.standings = []
+        self.playoff_teams = {}
+        self.conference_final_teams = {}
+        self.semifinal_teams = {}
+        self.final_teams = []
+        self.champion = None
 
     def return_game_id(self):
         self.game_id += 1

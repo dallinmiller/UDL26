@@ -1,7 +1,7 @@
 from Interface.utility_functions import get_continue, clear_screen, get_int
 from tabulate import tabulate
 
-def print_schedule(season):
+def print_schedule(season, UI_next="schedule"):
     for week_number, week in enumerate(season.season_schedule, start=1):
         week_table = []
 
@@ -16,10 +16,10 @@ def print_schedule(season):
 
     print("\n\n")
     get_continue()
-    return "schedule"
+    return UI_next
 
     
-def print_week(season):
+def print_week(season, UI_next="schedule"):
     week = get_int("What week would you like to see? ")
 
     while week < 1 or week > len(season.season_schedule):
@@ -39,9 +39,9 @@ def print_week(season):
 
     print("\n\n")
     get_continue()
-    return "schedule"
+    return UI_next
 
-def upcoming_week(season):
+def upcoming_week(season, UI_next="schedule"):
     week_table = []
 
     for game in season.season_schedule[season.week - 1]:
@@ -55,7 +55,7 @@ def upcoming_week(season):
 
     print("\n\n")
     get_continue()
-    return "schedule"
+    return UI_next
 
 def find_schedule(season, team):
     team_schedule = []
@@ -67,7 +67,7 @@ def find_schedule(season, team):
 
     return team_schedule
 
-def print_match(season, team):
+def print_match(season, team, UI_next="schedule"):
     week = get_int("What week would you like to see? ")
 
     while week < 1 or week > len(season.season_schedule):
@@ -88,10 +88,10 @@ def print_match(season, team):
 
     print("\n\n")
     get_continue()
-    return "schedule"
+    return UI_next
 
 
-def print_team(season, team):
+def print_team(season, team, UI_next="schedule"):
     week_table = []
 
     for week_number, week in enumerate(season.season_schedule, start=1):
@@ -107,9 +107,9 @@ def print_team(season, team):
 
     print("\n\n")
     get_continue()
-    return "schedule"
+    return UI_next
 
-def print_results(season):
+def print_results(season, UI_next="schedule"):
     for week_number, week in enumerate(season.season_results, start=1):
 
         week_table = []
@@ -139,7 +139,7 @@ def print_results(season):
         print("\n\n")
 
     get_continue()
-    return "schedule"
+    return UI_next
 
 def print_weekly_results(season, UI_next="schedule"):
     week_table = []

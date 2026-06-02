@@ -5,5 +5,8 @@ class Season:
         self.week = 1
         self.season_schedule = []
         self.season_results = []
+        self.playoff_schedule = []
+        self.playoff_results = []
         self.playoff = False
-        self.playoff_week = -1
+        self.complete = False
+        self.playoff_week = 0

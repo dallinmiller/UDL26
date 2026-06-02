@@ -75,7 +75,6 @@ def team_updates(game):
     game.away_team.opponent_points += game.score_home
 
 def season_update(season):
-    print(len(season.season_schedule))
     if season.week < len(season.season_schedule):
         season.season_results.append(season.season_schedule[season.week - 1])
         season.week += 1

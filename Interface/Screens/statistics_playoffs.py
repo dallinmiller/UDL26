@@ -5,20 +5,19 @@ from tabulate import tabulate
 
 stat_names = ["Team", "W", "L", "P", "PPG", "OP", "OPPG", "PD"]
 
-
-def single_team_stats(team, UI_next="stats"):
-    a, b, c, d, e, f, g = team.return_stats()
+def single_team_stats_playoff(team, league):
+    a, b, c, d, e, f, g = team.return_playoff_stats()
     stats_table = [[f"{team.city} {team.name}", a, b, c, d, e, f, g]]
 
     print(tabulate(stats_table, headers=stat_names, tablefmt="grid"))
     print("\n\n")
 
+
     get_continue()
-    return UI_next
+    return "playoff_stats"
 
-
-def master_stats(league, sorting_index):
-    stats_table = master_stats_return(league)
+def master_stats_playoff(league, sorting_index):
+    stats_table = master_stats_return_playoff(league)
 
     if sorting_index == 0:
         print(tabulate(stats_table, headers=stat_names, tablefmt="grid"))
@@ -33,16 +32,16 @@ def master_stats(league, sorting_index):
         print("\n\n")
 
 
-def master_stats_menu(league, UI_next="stats"):
-    master_stats(league, 0)
+def master_stats_menu_playoff(league):
+    master_stats_playoff(league, 0)
     while True:
         options = ["Wins", "Losses", "Points", "PPG", "Opponent Points",
                    "Opponent PPG", "Point Differential", "Back"]  # Update with Game
         choice = create_menu("Sort?", options)
         clear_screen()
         if choice < 8:
-            master_stats(league, choice)
+            master_stats_playoff(league, choice)
         elif choice == 8:
-            return UI_next
+            return "playoff_stats"
         else:
             print("Invalid Response: Retry")

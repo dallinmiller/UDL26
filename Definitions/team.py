@@ -19,6 +19,18 @@ class Team:
         self.turnovers = 0
         self.opponent_points = 0
         self.opponent_yards = 0
+
+        self.playoff_semis = False
+        self.playoff_wins = 0
+        self.playoff_losses = 0
+        self.playoff_total_points = 0
+        self.playoff_scores = 0
+        self.playoff_callahan = 0
+        self.playoff_total_yards = 0
+        self.playoff_turnovers = 0
+        self.playoff_opponent_points = 0
+        self.playoff_opponent_yards = 0
+
         self.players = []
 
     def update_win_loss(self):
@@ -32,3 +44,10 @@ class Team:
         return (self.wins, self.losses, self.total_points, (self.total_points/total_games if total_games > 0 else 0),
                 self.opponent_points, (self.opponent_points/total_games if total_games > 0 else 0),
                 self.total_points - self.opponent_points)
+
+    def return_playoff_stats(self):
+        total_games = self.playoff_wins + self.playoff_losses
+        return (self.playoff_wins, self.playoff_losses, self.playoff_total_points,
+                (self.playoff_total_points/total_games if total_games > 0 else 0),
+                self.playoff_opponent_points, (self.playoff_opponent_points/total_games if total_games > 0 else 0),
+                self.playoff_total_points - self.playoff_opponent_points)
