@@ -27,6 +27,14 @@ class League:
         self.final_teams = []
         self.champion = None
 
+        self.reset_values = {
+            "playoff_teams": {},
+            "conference_final_teams": {},
+            "semifinal_teams": {},
+            "final_teams": [],
+            "champion": None
+        }
+
     def return_game_id(self):
         self.game_id += 1
         return self.game_id

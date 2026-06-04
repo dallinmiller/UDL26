@@ -33,6 +33,7 @@ class TeamHistory:
         self.opponent_points = 0
         self.opponent_yards = 0
 
+        # Note: Currently, counts all appearances.
         self.conference_semis_appearances = 0
         self.conference_final_appearances = 0
         self.playoff_semis_appearances = 0

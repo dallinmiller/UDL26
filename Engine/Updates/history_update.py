@@ -36,19 +36,13 @@ def season_history_update(season):
     for week in season.season_results:
         week_history = []
         for game in week:
-            week_history.append([game.home_team.city, game.home_team.name, game.away_team.city, game.away_team.name,
-                                 game.game_id, game.rivalry, game.tight_race, game.match_time, game.score_home, 
-                                 game.score_away, game.overtime]
-            )
+            week_history.append(game)
         season_results_history.append(week_history)
     
     for week in season.playoff_results:
         week_history = []
         for game in week:
-            week_history.append([game.home_team.city, game.home_team.name, game.away_team.city, game.away_team.name,
-                                 game.game_id, game.rivalry, game.tight_race, game.match_time, game.score_home, 
-                                 game.score_away, game.overtime]
-            )
+            week_history.append(game)
         playoff_results_history.append(week_history)
         
     season_histories.append(SeasonHistory(season_number, season_results_history, playoff_results_history))
@@ -67,21 +61,21 @@ def team_history_update(team):
 
     if team.playoff_semis:
         team.team_history.conference_semis_appearances += 1
-        if team.playoff_wins == 1:
+        if team.playoff_wins >= 1:
             team.team_history.conference_final_appearances += 1
-        if team.playoff_wins == 2:
+        if team.playoff_wins >= 2:
             team.team_history.playoff_semis_appearances += 1
-        if team.playoff_wins == 3:
+        if team.playoff_wins >= 3:
             team.team_history.playoff_final_appearances += 1
         if team.playoff_wins == 4:
             team.team_history.league_champion += 1
     elif team.playoff_wins + team.playoff_losses > 1:
         team.team_history.conference_final_appearances += 1
-        if team.playoff_wins == 1:
+        if team.playoff_wins >= 1:
             team.team_history.playoff_semis_appearances += 1
-        if team.playoff_wins == 2:
+        if team.playoff_wins >= 2:
             team.team_history.playoff_final_appearances += 1
-        if team.playoff_wins == 3:
+        if team.playoff_wins >= 3:
             team.team_history.league_champion += 1
 
     team.team_history.playoff_wins += team.playoff_wins

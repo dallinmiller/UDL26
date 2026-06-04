@@ -1,6 +1,11 @@
 from Interface.utility_functions import clear_screen, create_menu
+from Interface.Screens.schedules import upcoming_week
+from Interface.Screens.schedules_playoffs import print_upcoming_schedule_playoff
+from History.histories import league_histories
 
-def main_menu():
+def main_menu(league, season):
+    upcoming_week(season, False,None)
+
     options = [
         ("Schedule Menu", "schedule"),
         ("Admin Menu", "admin"),
@@ -120,7 +125,13 @@ def archive_menu(UI_next="main"):
     else:
         raise ValueError("Invalid UI_next")
 
-def playoff_menu():
+def playoff_menu(league, season):
+    print_upcoming_schedule_playoff(season, False)
+
+    print(f"User playoff wins: {league.user_team.playoff_wins}")
+    print(f"User playoff losses: {league.user_team.playoff_losses}")
+    print(f"User win-loss: {league.user_team.win_loss}")
+
     options = [
         ("Schedule Menu", "playoff_schedule"),
         ("Admin Menu", "playoff_admin"),

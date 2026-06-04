@@ -39,9 +39,10 @@ def print_week(season, UI_next="schedule"):
 
     print("\n\n")
     get_continue()
+
     return UI_next
 
-def upcoming_week(season, UI_next="schedule"):
+def upcoming_week(season, controlled=True, UI_next="schedule"):
     week_table = []
 
     for game in season.season_schedule[season.week - 1]:
@@ -53,8 +54,9 @@ def upcoming_week(season, UI_next="schedule"):
     headers = [f"Week {season.week}", "Home Team", "", "Away Team"]
     print(tabulate(week_table, headers=headers, tablefmt="grid"))
 
-    print("\n\n")
-    get_continue()
+    if controlled:
+        print("\n\n")
+        get_continue()
     return UI_next
 
 def find_schedule(season, team):

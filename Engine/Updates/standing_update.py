@@ -19,3 +19,5 @@ def update_standings(league):
     update_process(divisions)
     whole_league = [league.all_teams]
     update_process(whole_league)
+    for i, team in enumerate(league.all_teams):
+        team.standing = i + 1

@@ -8,7 +8,7 @@ week_names = [
         "Finals"
     ]
 
-def print_schedule_playoff(season, UI_next="playoff_schedule"):
+def print_schedule_playoff(season, controlled=True, UI_next="playoff_schedule"):
     # TODO: Update to fancy screen
     for i, week in enumerate(season.playoff_schedule, start=0):
         week_table = []
@@ -22,11 +22,13 @@ def print_schedule_playoff(season, UI_next="playoff_schedule"):
         headers = [f"{week_names[i]}", "Home Team", "", "Away Team"]
         print(tabulate(week_table, headers=headers, tablefmt="grid"))
 
-    print("\n\n")
-    get_continue()
+    if controlled:
+        print("\n\n")
+        get_continue()
+
     return UI_next
 
-def print_upcoming_schedule_playoff(season):
+def print_upcoming_schedule_playoff(season, controlled=True):
     week_table = []
 
     for game in season.playoff_schedule[season.playoff_week - 1]:
@@ -38,8 +40,10 @@ def print_upcoming_schedule_playoff(season):
     headers = [f"{week_names[season.playoff_week - 1]}", "Home Team", "", "Away Team"]
     print(tabulate(week_table, headers=headers, tablefmt="grid"))
 
-    print("\n\n")
-    get_continue()
+    if controlled:
+        print("\n\n")
+        get_continue()
+
     return "playoff_schedule"
 
 def print_results_playoff(season):
@@ -104,4 +108,10 @@ def print_weekly_results_playoff(season, UI_next="playoff_schedule"):
 
 
     get_continue()
+    return UI_next
+
+def print_champion(league, UI_next="end_season"):
+    print(f"Congratulations to the {league.champion.city} {league.champion.name} for winning the UDL Final")
+    get_continue()
+
     return UI_next

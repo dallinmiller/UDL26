@@ -14,13 +14,13 @@ from Engine.Updates.playoff_update import *
 
 def game_control(league, season):
     menus = {
-        "main": lambda: main_menu(),
+        "main": lambda: main_menu(league, season),
         "schedule": lambda: schedule_menu(),
         "admin": lambda: admin_menu(),
         "standings": lambda: standings_menu(),
         "stats": lambda: stats_menu(),
         "archive": lambda: archive_menu(),
-        "playoff": lambda: playoff_menu(),
+        "playoff": lambda: playoff_menu(league, season),
         "playoff_schedule": lambda: playoff_schedule_menu(),
         "playoff_standings": lambda: standings_menu("playoff"),
         "playoff_admin": lambda: playoff_admin_menu(),
@@ -68,7 +68,8 @@ def game_control(league, season):
         "team_schedule_playoff": lambda: print_team(season, league.user_team, "playoff_schedule"),
         "results_playoff": lambda: print_results(season, "playoff_schedule"),
         "playoff_results_new": lambda: print_weekly_results_playoff(season, "playoff"),
-        "playoff_results_final": lambda:print_weekly_results_playoff(season, "end_season"),
+        "playoff_results_final": lambda:print_weekly_results_playoff(season, "champion_page"),
+        "champion_page": lambda:print_champion(league, "end_season")
     }
 
     playoff_admin_screens = {

@@ -8,6 +8,7 @@ class Team:
         self.conference = conference
         self.division = division
         self.league_index = 0
+        self.standing = 1
         self.prestige = 1
         self.season_status = "calm"
         self.game_status = "calm"
@@ -34,6 +35,32 @@ class Team:
         self.playoff_opponent_yards = 0
 
         self.players = []
+        
+        self.reset_values = {
+            "prestige": 1,
+            "season_status": "calm",
+            "game_status": "calm",
+            "wins": 0,
+            "losses": 0,
+            "win_loss": 0,
+            "total_points": 0,
+            "scores": 0,
+            "callahan": 0,
+            "total_yards": 0,
+            "turnovers": 0,
+            "opponent_points": 0,
+            "opponent_yards": 0,
+            "playoff_semis": False,
+            "playoff_wins": 0,
+            "playoff_losses": 0,
+            "playoff_total_points": 0,
+            "playoff_scores": 0,
+            "playoff_callahan": 0,
+            "playoff_total_yards": 0,
+            "playoff_turnovers": 0,
+            "playoff_opponent_points": 0,
+            "playoff_opponent_yards": 0
+        }
 
     def update_win_loss(self):
         self.win_loss = self.wins - self.losses
