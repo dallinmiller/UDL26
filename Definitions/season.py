@@ -10,3 +10,4 @@ class Season:
         self.playoff = False
         self.complete = False
         self.playoff_week = 0
+        self.headlines = []

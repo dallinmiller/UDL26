@@ -59,13 +59,21 @@ def team_updates(game):
     if game.winner == "home":
         game.home_team.wins += 1
         game.home_team.win_loss += 1
+        game.home_team.win_streak += 1
+        game.home_team.lose_streak = 0
         game.away_team.losses += 1
         game.away_team.win_loss -= 1
+        game.away_team.lose_streak += 1
+        game.away_team.win_streak = 0
     else:
         game.home_team.losses += 1
         game.home_team.win_loss -= 1
+        game.home_team.lose_streak += 1
+        game.home_team.win_streak = 0
         game.away_team.wins += 1
         game.away_team.win_loss += 1
+        game.away_team.win_streak += 1
+        game.away_team.lose_streak = 0
 
     game.home_team.total_points += game.score_home
     game.home_team.scores += game.score_home

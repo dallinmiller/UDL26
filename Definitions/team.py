@@ -9,9 +9,14 @@ class Team:
         self.division = division
         self.league_index = 0
         self.standing = 1
+        self.win_streak = 0
+        self.lose_streak = 0
         self.prestige = 1
         self.season_status = "calm"
         self.game_status = "calm"
+        self.playoff_clinched = False
+        self.playoff_eliminated = False
+        self.playoff_near_eliminated = False
         self.wins = 0
         self.losses = 0
         self.win_loss = 0
@@ -38,8 +43,13 @@ class Team:
         
         self.reset_values = {
             "prestige": 1,
+            "win_streak": 0,
+            "lose_streak": 0,
             "season_status": "calm",
             "game_status": "calm",
+            "playoff_clinched": False,
+            "playoff_eliminated": False,
+            "playoff_near_eliminated": False,
             "wins": 0,
             "losses": 0,
             "win_loss": 0,

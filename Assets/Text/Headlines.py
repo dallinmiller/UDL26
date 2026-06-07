@@ -15,6 +15,24 @@ def winner(game, capital=False):
     else:
         return city_or_team(game.away_team, True) if capital else city_or_team(game.away_team)
 
+def winner_city(game):
+    return game.home_team.city if game.winner == "home" else game.away_team.city
+
+def loser_city(game):
+    return game.home_team.city if game.winner == "away" else game.away_team.city
+
+def winner_name(game, capital=False):
+    if capital:
+        return f"The {game.home_team.name}" if game.winner == "home" else f"The {game.away_team.name}"
+    else:
+        return f"the {game.home_team.name}" if game.winner == "home" else f"the {game.away_team.name}"
+
+def loser_name(game, capital=False):
+    if capital:
+        return f"The {game.home_team.name}" if game.winner == "away" else f"The {game.away_team.name}"
+    else:
+        return f"the {game.home_team.name}" if game.winner == "away" else f"the {game.away_team.name}"
+
 def loser(game, capital=False):
     if game.winner == "home":
         return city_or_team(game.away_team, capital) if capital else city_or_team(game.away_team)
@@ -38,220 +56,221 @@ def matchup_and(game, capital=False):
     return random.choice([cities, names])
 
 # Team Headlines
-def top_team_headlines(top_team, other_team, headline_index):
+def top_team_headlines(game, headline_index):
     does_it_again = [
-        f"{city_or_team(top_team, True)} continued their dominance this week with another convincing victory. "
+        f"{winner(game, True)} continued their dominance this week with another convincing victory. "
         f"The rest of the league is still searching for an answer.",
-        f"Another week brought another win for {city_or_team(top_team)}. At this point, "
+        f"Another week brought another win for {winner(game)}. At this point, "
         f"excellence has become the expectation.",
-        f"{city_or_team(top_team, True)} once again showed why they sit atop the standings. The championship "
+        f"{winner(game, True)} once again showed why they sit atop the standings. The championship "
         f"favorites remain firmly in control.",
-        f"The winning keeps coming for {city_or_team(top_team)}. Their performance against {city_or_team(other_team)} "
+        f"The winning keeps coming for {winner(game)}. Their performance against {loser(game)} "
         f"this week only strengthened their grip on the league.",
-        f"{city_or_team(top_team, True)} handled business once again this week. Every victory makes them look "
+        f"{winner(game, True)} handled business once again this week. Every victory makes them look "
         f"more and more unstoppable."
     ]
 
     scraped_by = [
-        f"{city_or_team(top_team, True)} escaped with a narrow victory against {city_or_team(other_team)} this "
+        f"{winner(game, True)} escaped with a narrow victory against {loser(game)} this "
         f"week. It wasn't pretty, but the win still counts.",
-        f"{city_or_team(top_team, True)} found a way to survive after {city_or_team(other_team)} pushed them "
+        f"{winner(game, True)} found a way to survive after {loser(game)} pushed them "
         f"to the brink this week. Championship teams often win games like these.",
-        f"A major scare nearly derailed {top_team.city}'s momentum this week. Instead, they found a way to grind "
+        f"A major scare nearly derailed {winner_city(game)}'s momentum this week. Instead, they found a way to grind "
         f"out another win.",
-        f"{city_or_team(top_team, True)} looked vulnerable for perhaps the first time all season. Fortunately "
+        f"{winner(game, True)} looked vulnerable for perhaps the first time all season. Fortunately "
         f"for them, the final score still went their way.",
-        f"The league leaders were forced to work overtime this week. In the end, {city_or_team(top_team)} did just "
+        f"The league leaders were forced to work overtime this week. In the end, {winner(game)} did just "
         f"enough to remain on top."
     ]
 
     surprising_loss = [
-        f"The league was stunned this week as {city_or_team(top_team)} suffered an unexpected defeat. Even the best "
+        f"The league was stunned this week as {loser(game)} suffered an unexpected defeat. Even the best "
         f"teams have bad days.",
-        f"{city_or_team(top_team, True)} finally came back down to earth after a shocking loss. The result has "
+        f"{loser(game, True)} finally came back down to earth after a shocking loss. The result has "
         f"opened the door for several challengers.",
-        f"One of the season's biggest surprises occurred this week when {city_or_team(top_team)} was defeated. The "
+        f"One of the season's biggest surprises occurred this week when {loser(game)} was defeated. The "
         f"race for the top suddenly looks much tighter.",
-        f"{city_or_team(top_team, True)} entered the week as heavy favorites but left with a loss. It was a "
+        f"{loser(game, True)} entered the week as heavy favorites but left with a loss. It was a "
         f"reminder that no victory is guaranteed.",
-        f"The unthinkable happened this week as {city_or_team(top_team)} fell short against "
-        f"{city_or_team(other_team)}. Their lead remains strong, but questions are beginning to emerge."
+        f"The unthinkable happened this week as {loser(game)} fell short against "
+        f"{winner(game)}. Their lead remains strong, but questions are beginning to emerge."
     ]
 
     options = [does_it_again, scraped_by, surprising_loss]
     weight = [7, 8, 10]
 
-    return [random.choice(options[headline_index]), weight[headline_index], top_team]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def contender_headlines(contender, other_team, headline_index):
+def contender_headlines(game, headline_index):
     beat_top_team = [
-        f"{city_or_team(contender, True)} delivered a statement victory by taking down "
-        f"{city_or_team(other_team)}. The title race suddenly became much more interesting.",
-        f"Nobody can ignore {city_or_team(contender)} after this week's performance. Defeating "
-        f"{city_or_team(other_team)} has firmly established them as a legitimate threat.",
-        f"{city_or_team(contender, True)} proved they belong among the league's elite with a huge victory over "
-        f"{city_or_team(other_team)}. The standings may never look the same.",
-        f"One of the biggest games of the season lived up to the hype as {city_or_team(contender)} defeated "
-        f"{city_or_team(other_team)}. The championship picture just got a lot more crowded.",
-        f"{city_or_team(contender, True)} walked into a difficult matchup and emerged victorious. Their win "
-        f"over {city_or_team(other_team)} sent a message to the entire league."
+        f"{winner(game, True)} delivered a statement victory by taking down "
+        f"{loser(game)}. The title race suddenly became much more interesting.",
+        f"Nobody can ignore {winner(game)} after this week's performance. Defeating "
+        f"{loser(game)} has firmly established them as a legitimate threat.",
+        f"{winner(game, True)} proved they belong among the league's elite with a huge victory over "
+        f"{loser(game)}. The standings may never look the same.",
+        f"One of the biggest games of the season lived up to the hype as {winner(game)} defeated "
+        f"{loser(game)}. The championship picture just got a lot more crowded.",
+        f"{winner(game, True)} walked into a difficult matchup and emerged victorious. Their win "
+        f"over {loser(game)} sent a message to the entire league."
     ]
 
     surprising_loss = [
-        f"{city_or_team(contender, True)} suffered a disappointing defeat this week against an opponent many "
+        f"{loser(game, True)} suffered a disappointing defeat this week against an opponent many "
         f"expected them to beat. The loss could have serious playoff implications.",
-        f"Momentum came to a halt for {city_or_team(contender)} after an unexpected setback against "
-        f"{city_or_team(other_team)}. They will need to regroup quickly.",
-        f"{city_or_team(contender, True)} entered the week with high expectations but left with plenty of "
+        f"Momentum came to a halt for {loser(game)} after an unexpected setback against "
+        f"{winner(game)}. They will need to regroup quickly.",
+        f"{loser(game, True)} entered the week with high expectations but left with plenty of "
         f"questions. Their playoff position suddenly feels less secure.",
-        f"A costly loss against {city_or_team(other_team)} has complicated the road ahead for "
-        f"{city_or_team(contender)}. Every game matters this late in the season.",
-        f"{city_or_team(contender, True)} missed an opportunity to strengthen its standing this week. Instead, "
+        f"A costly loss against {winner(game)} has complicated the road ahead for "
+        f"{loser(game)}. Every game matters as the season continues.",
+        f"{loser(game, True)} missed an opportunity to strengthen its standing this week. Instead, "
         f"they now face increased pressure moving forward."
     ]
 
     winning_streak = [
-        f"{city_or_team(contender, True)} continue to show they are one of the hottest teams in the league "
+        f"{winner(game, True)} continue to show they are one of the hottest teams in the league "
         f"right now. Their winning streak continues to grow with every passing week.",
-        f"{city_or_team(contender, True)} keep finding ways to win. What started as a solid season is "
+        f"{winner(game, True)} keep finding ways to win. What started as a solid season is "
         f"beginning to look like something special.",
-        f"Confidence is surging throughout the organization as {city_or_team(contender)} extended its winning streak "
+        f"Confidence is surging throughout the organization as {winner(game)} extended its winning streak "
         f"this week. Few teams want to face them right now.",
-        f"{city_or_team(contender, True)} continued its remarkable run this week against "
-        f"{city_or_team(other_team)}. Their recent form has made them a serious championship contender.",
-        f"The victories keep piling up for {city_or_team(contender)}. Momentum is firmly on their side as the "
+        f"{winner(game, True)} continued its remarkable run this week against "
+        f"{loser(game)}. Their recent form has made them a serious championship contender.",
+        f"The victories keep piling up for {winner(game)}. Momentum is firmly on their side as the "
         f"season progresses."
     ]
 
     close_top_team = [
-        f"{city_or_team(contender, True)} came up short, but their performance against "
-        f"{city_or_team(other_team)} earned plenty of respect. They proved they can compete with the league's best.",
-        f"Despite the loss against {city_or_team(other_team)}, {city_or_team(contender)} showed that the gap between "
+        f"{loser(game, True)} came up short, but their performance against "
+        f"{loser(game)} earned plenty of respect. They proved they can compete with the league's best.",
+        f"Despite the loss against {winner(game)}, {loser(game)} showed that the gap between "
         f"contenders and favorites may be smaller than many thought.",
-        f"{city_or_team(contender, True)} pushed {city_or_team(other_team)} to the limit this week. Fans are "
+        f"{loser(game, True)} pushed {winner(game)} to the limit this week. Fans are "
         f"hoping that these teams find a way to rematch in the upcoming playoffs.",
-        f"The final score favored {city_or_team(other_team)}, but {city_or_team(contender)} left the field with "
+        f"The final score favored {winner(game)}, but {loser(game)} left the field with "
         f"newfound credibility. They look capable of making noise in the postseason.",
-        f"{city_or_team(contender, True)} nearly pulled off one of the biggest wins of the year. Even in "
+        f"{loser(game, True)} nearly pulled off one of the biggest wins of the year. Even in "
         f"defeat, they strengthened their reputation."
     ]
 
     options = [beat_top_team, surprising_loss, winning_streak, close_top_team]
     weight = [10, 9, 8, 6]
 
-    return [random.choice(options[headline_index]), weight[headline_index], contender]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def middler_headlines(middler, other_team, headline_index):
+def middler_headlines(game, headline_index):
     beat_top_team = [
-        f"{city_or_team(middler, True)} shocked the league this week with a stunning upset over "
-        f"{city_or_team(other_team)}. Nobody saw this result coming.",
-        f"One of the season's biggest surprises occurred as {city_or_team(middler)} knocked off "
-        f"{city_or_team(other_team)} this week. The underdogs seized their moment.",
-        f"{city_or_team(middler, True)} may have changed the playoff picture with a massive upset victory. Their "
+        f"{winner(game, True)} shocked the league this week with a stunning upset over "
+        f"{loser(game)}. Nobody saw this result coming.",
+        f"One of the season's biggest surprises occurred as {winner(game)} knocked off "
+        f"{loser(game)} this week. The underdogs seized their moment.",
+        f"{winner(game, True)} may have changed the playoff picture with a massive upset victory. Their "
         f"season suddenly has new life.",
-        f"The standings were shaken this week as {city_or_team(middler)} defeated {city_or_team(other_team)}. It "
+        f"The standings were shaken this week as {winner(game)} defeated {loser(game)}. It "
         f"was a result that few expected.",
-        f"{city_or_team(middler, True)} delivered a reminder that every team is dangerous on the right day. Their "
-        f"upset of {city_or_team(other_team)} will be remembered for quite some time."
+        f"{winner(game, True)} delivered a reminder that every team is dangerous on the right day. Their "
+        f"upset of {loser(game)} will be remembered for quite some time."
     ]
 
     close_top_team = [
-        f"{city_or_team(middler, True)} may not have won, but they showed they can compete with stronger "
+        f"{loser(game, True)} may not have won, but they showed they can compete with stronger "
         f"opponents. Their performance earned attention around the league.",
-        f"A narrow defeat against {city_or_team(other_team)} revealed a great deal about {city_or_team(middler)}. They "
+        f"A narrow defeat against {winner(game)} revealed a great deal about {loser(game)}. They "
         f"are much tougher than their record suggests.",
-        f"{city_or_team(middler, True)} nearly pulled off an upset this week. Even in defeat, there are plenty "
+        f"{loser(game, True)} nearly pulled off an upset this week. Even in defeat, there are plenty "
         f"of reasons for optimism.",
-        f"The final score favored the better team, but {city_or_team(middler)} made them earn every point. It was "
+        f"The final score favored the better team, but {loser(game)} made them earn every point. It was "
         f"an encouraging effort.",
-        f"{city_or_team(middler, True)} exceeded expectations by hanging tough against "
-        f"{city_or_team(other_team)}. They may be turning a corner."
+        f"{loser(game, True)} exceeded expectations by hanging tough against "
+        f"{winner(game)}. They may be turning a corner."
     ]
 
     winning_streak = [
-        f"The {middler.name} are quietly becoming one of the league's hottest teams after beating "
-        f"{city_or_team(other_team)}. Their recent success is beginning to attract attention.",
-        f"{city_or_team(middler, True)} continued its climb up the standings with another victory. A playoff "
+        f"{winner_name(game, True)} are quietly becoming one of the league's hottest teams after beating "
+        f"{loser(game)}. Their recent success is beginning to attract attention.",
+        f"{winner(game, True)} continued its climb up the standings with another victory. A playoff "
         f"push suddenly feels realistic.",
-        f"The season looked average just weeks ago, but {middler.city} is building serious momentum. Opponents "
+        f"The season looked average just weeks ago, but {winner_city(game)} is building serious momentum. Opponents "
         f"are starting to take notice.",
-        f"{city_or_team(middler, True)} extended their winning streak and strengthened their postseason hopes. "
+        f"{winner(game, True)} extended their winning streak and strengthened their postseason hopes. "
         f"Confidence is growing throughout the organization.",
         f"What once looked like a middle-of-the-pack team is beginning to look much more dangerous. "
-        f"{middler.city} is on a roll."
+        f"{winner_city} is on a roll."
     ]
 
     facing_elimination = [
-        f"{city_or_team(middler, True)} finds themselves in a must-win situation after another difficult week. "
+        f"{loser(game, True)} finds themselves in a must-win situation after another difficult week. "
         f"Their playoff hopes are hanging by a thread."
-        f"The margin for error has disappeared for {city_or_team(middler)}. Every remaining game now carries "
+        f"The margin for error has disappeared for {loser(game)}. Every remaining game now carries "
         f"enormous importance."
-        f"{middler.city} is running out of opportunities to save its season after its loss against "
-        f"{city_or_team(other_team)}. Another loss could end their playoff dreams."
-        f"The pressure continues to mount on {city_or_team(middler)}. Their postseason future remains uncertain."
-        f"Time is running out for {city_or_team(middler)}. The next few weeks may determine the fate of their season."
+        f"{loser_city(game)} is running out of opportunities to save its season after its loss against "
+        f"{winner(game)}. Another loss could end their playoff dreams."
+        f"The pressure continues to mount on {loser(game)}. Their postseason future remains uncertain."
+        f"Time is running out for {loser(game)}. The next few weeks may determine the fate of their season."
     ]
 
     options = [beat_top_team, close_top_team, winning_streak, facing_elimination]
     weight = [9, 6, 7, 6]
 
-    return [random.choice(options[headline_index]), weight[headline_index], middler]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def bottom_feeder_headlines(bottom, other_team, headline_index):
+def bottom_feeder_headlines(game, headline_index):
     loses_again = [
-        f"{bottom.city}'s difficult season continued this week with another defeat, this time at the hands of "
-        f"{city_or_team(other_team)}. Better days cannot come soon enough.",
-        f"The losses continue to pile up for {city_or_team(bottom)}. Finding positives has become increasingly "
+        f"{loser_city(game)}'s difficult season continued this week with another defeat, this time at the hands of "
+        f"{winner(game)}. Better days cannot come soon enough.",
+        f"The losses continue to pile up for {loser(game)}. Finding positives has become increasingly "
         f"difficult.",
-        f"The {bottom.name} remain stuck near the bottom of the standings after another disappointing "
+        f"{loser_name(game, True)} remain stuck near the bottom of the standings after another disappointing "
         f"result. The search for answers continues.",
-        f"Another week brought another setback for {city_or_team(bottom)}. Their season has become an uphill battle.",
-        f"{city_or_team(bottom, True)} hoped to build momentum this week but instead suffered another loss. "
+        f"Another week brought another setback for {loser(game)}. Their season has become an uphill battle.",
+        f"{loser(game, True)} hoped to build momentum this week but instead suffered another loss. "
         f"The frustration is beginning to show."
     ]
 
     upset = [
-        f"In one of the season's biggest surprises, {city_or_team(bottom)} stunned the league with an incredible "
+        f"In one of the season's biggest surprises, {winner(game)} stunned the league with an incredible "
         f"upset victory. Nobody expected this result.",
-        f"{city_or_team(bottom, True)} shocked everyone this week by defeating a heavily favored opponent. For "
+        f"{winner(game, True)} shocked everyone this week by defeating a heavily favored opponent. For "
         f"one day, they looked unstoppable.",
-        f"The impossible became reality as {city_or_team(bottom)} earned a stunning victory. Fans will be talking "
+        f"The impossible became reality as {winner(game)} earned a stunning victory. Fans will be talking "
         f"about this game for weeks.",
-        f"{city_or_team(bottom, True)} entered the matchup as a clear underdog but left as the winner. It may "
-        f"be the upset of the season.",
-        f"A struggling season produced a memorable moment this week as {city_or_team(bottom)} knocked off one "
-        f"of the league's best teams."
+        f"{winner(game, True)} entered the matchup against {loser(game)} as a clear underdog but left as the "
+        f"winner. It may be the upset of the season.",
+        f"A struggling season produced a memorable moment this week as {winner(game)} knocked off one "
+        f"of the league's best teams in {loser(game)}."
     ]
 
     winning_streak = [
-        f"{city_or_team(bottom, True)} may have waited a long time, but they are finally building momentum. "
+        f"{winner(game, True)} may have waited a long time, but they are finally building momentum. "
         f"Their recent play has been impossible to ignore.",
-        f"After months near the bottom of the standings, {city_or_team(bottom)} is beginning to show signs of life. "
+        f"After months near the bottom of the standings, {winner(game)} is beginning to show signs of life. "
         f"A late-season run is underway.",
-        f"{city_or_team(bottom, True)} continued its surprising turnaround this week against "
-        f"{city_or_team(other_team)}. What once seemed impossible now feels within reach.",
-        f"The league's former cellar-dwellers are suddenly winning games. {bottom.city} has become one of the most "
-        f"interesting stories in the league.",
-        f"The {bottom.name} refuse to quit despite the odds. Their recent surge has created unexpected excitement."
+        f"{winner(game, True)} continued its surprising turnaround this week against "
+        f"{loser(game)}. What once seemed impossible now feels within reach.",
+        f"The league's former cellar-dwellers are suddenly winning games. {winner_city(game)} has become one of the "
+        f"most interesting stories in the league.",
+        f"{winner_name(game, True)} refuse to quit despite the odds. Their recent surge has created unexpected "
+        f"excitement."
     ]
 
     elimination = [
-        f"{bottom.city}'s playoff hopes officially came to an end this week against {city_or_team(other_team)}. Their "
+        f"{loser_city(game)}'s playoff hopes officially came to an end this week against {winner(game)}. Their "
         f"focus now turns toward next season.",
-        f"A difficult year reached another disappointing milestone as the {bottom.name} were eliminated from "
+        f"A difficult year reached another disappointing milestone as {loser_name(game)} were eliminated from "
         f"postseason contention this week.",
-        f"The math is now official: {city_or_team(bottom)} can no longer reach the playoffs. The organization "
+        f"The math is now official: {loser(game)} can no longer reach the playoffs. The organization "
         f"faces important questions moving forward.",
-        f"{bottom.city}'s season will end without a playoff appearance. Attention has already begun shifting "
+        f"{loser_city(game)}'s season will end without a playoff appearance. Attention has already begun shifting "
         f"toward the future.",
-        f"After a long struggle, the {bottom.name} were officially eliminated this week. Their remaining games will be "
+        f"After a long struggle, {loser_name(game)} were officially eliminated this week. Their remaining games will be "
         f"about pride and development."
     ]
 
     options = [loses_again, upset, winning_streak, elimination]
     weight = [4, 7, 5, 5]
 
-    return [random.choice(options[headline_index]), weight[headline_index], bottom]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
 # Game Headlines
 def close_game_headlines(game, headline_index):
@@ -526,7 +545,7 @@ def first_week_headlines(team=None, headline_index=0):
 
     return [random.choice(options[headline_index]), weight[headline_index], team]
 
-def second_week_headlines(team=None, headline_index=0):
+def second_week_headlines(game=None, headline_index=0):
     second_week = [
         f"Week one provided the first glimpse of which teams may contend and which teams may struggle. The season "
         f"is officially underway.",
@@ -541,53 +560,53 @@ def second_week_headlines(team=None, headline_index=0):
     ]
 
     early_winners = [
-        f"{city_or_team(team, True)} could not have asked for a better start. They open the season with a "
+        f"{winner(game, True)} could not have asked for a better start. They open the season with a "
         f"1-0 record.",
-        f"The first week is complete, and {team.city} sits undefeated. It is only one game, but it is a "
+        f"The first week is complete, and {winner_city} sits undefeated. It is only one game, but it is a "
         f"promising beginning.",
-        f"{city_or_team(team, True)} started the season on the right foot with an opening-week victory. Early "
+        f"{winner(game, True)} started the season on the right foot with an opening-week victory. Early "
         f"momentum can be valuable.",
-        f"There are plenty of games left to play, but the {team.name} have already secured an important first win.",
-        f"The opening week brought success for {city_or_team(team)}. They leave with a perfect 1-0 record.",
-        f"A strong start is often important, and {team.city} has one after winning their season opener.",
-        f"{city_or_team(team, True)} wasted no time making a positive impression. Week one ended with a "
+        f"There are plenty of games left to play, but {winner_name(game)} have already secured an important first win.",
+        f"The opening week brought success for {winner(game)}. They leave with a perfect 1-0 record.",
+        f"A strong start is often important, and {winner_city(game)} has one after winning their season opener.",
+        f"{winner(game, True)} wasted no time making a positive impression. Week one ended with a "
         f"victory in the standings.",
-        f"The road ahead remains long, but the {team.name} begin it with a win. A 1-0 record is exactly what they "
+        f"The road ahead remains long, but {winner_name(game)} begin it with a win. A 1-0 record is exactly what they "
         f"hoped for.",
-        f"{city_or_team(team, True)} made the most of their first opportunity. They start the season unbeaten "
+        f"{winner(game, True)} made the most of their first opportunity. They start the season unbeaten "
         f"after one week.",
-        f"The season opener went according to plan for {city_or_team(team)}. Their first win puts them in a favorable "
+        f"The season opener went according to plan for {winner(game)}. Their first win puts them in a favorable "
         f"early position."
     ]
 
     early_losers = [
-        f"{team.city} opens the season searching for answers after falling to 0-1. Not the ideal start, but there is "
+        f"{loser_city} opens the season searching for answers after falling to 0-1. Not the ideal start, but there is "
         f"still plenty of time to recover.",
-        f"The season is only one week old, but {city_or_team(team)} already find themselves playing from behind. "
+        f"The season is only one week old, but {loser(game)} already find themselves playing from behind. "
         f"Their opener ended in defeat.",
-        f"{city_or_team(team, True)} hoped for a better start to the year. Instead, they begin the season "
+        f"{loser(game, True)} hoped for a better start to the year. Instead, they begin the season "
         f"with a loss.",
-        f"Week one did not go according to plan for {city_or_team(team)}. They now turn their attention toward "
+        f"Week one did not go according to plan for {loser(game)}. They now turn their attention toward "
         f"avoiding an 0-2 start.",
-        f"The first result of the season landed in the wrong column for {city_or_team(team, True)}. Their "
+        f"The first result of the season landed in the wrong column for {loser(game)}. Their "
         f"record sits at 0-1.",
-        f"There is no reason to panic yet, but {city_or_team(team)} will be eager to bounce back after an opening-week "
+        f"There is no reason to panic yet, but {loser(game)} will be eager to bounce back after an opening-week "
         f"defeat.",
-        f"The {team.name} leave the first week still searching for their first victory. The season opener proved "
-        f"disappointing.",
-        f"The standings are young, but {team.city} already faces the challenge of recovering from a slow start.",
-        f"Opening-day optimism gave way to frustration for {city_or_team(team, True)}. Their season begins "
+        f"{loser_name(game, True)} leave the first week still searching for their first victory. The season "
+        f"opener proved disappointing.",
+        f"The standings are young, but {loser_city(game)} already faces the challenge of recovering from a slow start.",
+        f"Opening-day optimism gave way to frustration for {loser(game, True)}. Their season begins "
         f"with a loss.",
-        f"{city_or_team(team)} will have an opportunity to respond next week, but for now they sit at 0-1 after "
+        f"{loser(game)} will have an opportunity to respond next week, but for now they sit at 0-1 after "
         f"dropping their opener."
     ]
 
     options = [second_week, early_winners, early_losers]
     weight = [8, 7, 6]
 
-    return [random.choice(options[headline_index]), weight[headline_index], team]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def third_week_headlines(team=None, headline_index=0):
+def third_week_headlines(game=None, headline_index=0):
     third_week = [
         "With two weeks in the books, early trends are beginning to emerge. Some teams are validating expectations "
         "while others are searching for answers."
@@ -602,37 +621,37 @@ def third_week_headlines(team=None, headline_index=0):
     ]
 
     early_winners = [
-        f"{city_or_team(team, True)} opened the season with back-to-back victories. Early momentum is quickly "
+        f"{winner(game, True)} opened the season with back-to-back victories. Early momentum is quickly "
         f"becoming one of their greatest strengths.",
-        f"Two games, two wins for {city_or_team(team)}. Their perfect start has fans wondering how high this team "
+        f"Two games, two wins for {winner(game)}. Their perfect start has fans wondering how high this team "
         f"can climb.",
-        f"{city_or_team(team, True)} remained unbeaten by securing their second consecutive victory. The strong "
+        f"{winner(game, True)} remained unbeaten by securing their second consecutive victory. The strong "
         f"start is impossible to ignore.",
-        f"Another week brought another win for {city_or_team(team)}. They now sit at 2-0 and look ready to "
+        f"Another week brought another win for {winner(game)}. They now sit at 2-0 and look ready to "
         f"challenge anyone.",
-        f"{city_or_team(team, True)} showed early doubters this week why they shouldn't be slept on this "
+        f"{winner(game, True)} showed early doubters this week why they shouldn't be slept on this "
         f"season. Their second win keeps the early success rolling."
     ]
 
     early_losers = [
-        f"The season has gotten off to a difficult start for {city_or_team(team)}. Two games have produced "
+        f"The season has gotten off to a difficult start for {loser(game)}. Two games have produced "
         f"two losses and plenty of questions.",
-        f"{team.city} continues to search for answers after falling to 0-2. The urgency is already "
+        f"{loser_city(game)} continues to search for answers after falling to 0-2. The urgency is already "
         f"beginning to build.",
-        f"Another week brought another setback for {city_or_team(team)}. Their winless start now stretches through "
+        f"Another week brought another setback for {loser(game)}. Their winless start now stretches through "
         f"two games.",
-        f"{city_or_team(team, True)} hoped to bounce back, but the result only deepened their early struggles. "
+        f"{loser(game, True)} hoped to bounce back, but the result only deepened their early struggles. "
         f"An 0-2 record haunts the start to their season.",
-        f"The pressure continues to grow around {city_or_team(team)}. Their second straight loss puts them in an "
+        f"The pressure continues to grow around {loser(game)}. Their second straight loss puts them in an "
         f"early hole."
     ]
 
     options = [third_week, early_winners, early_losers]
     weight = [7, 7, 6]
 
-    return [random.choice(options[headline_index]), weight[headline_index], team]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def fourth_week_headlines(team=None, headline_index=0):
+def fourth_week_headlines(game=None, headline_index=0):
     fourth_week = [
         f"Three weeks into the season, the league is beginning to reveal its identity. Early contenders are "
         f"starting to establish themselves.",
@@ -647,35 +666,35 @@ def fourth_week_headlines(team=None, headline_index=0):
     ]
 
     early_winners = [
-        f"{city_or_team(team, True)} has stormed out to a 3-0 start. Few teams have looked stronger through "
+        f"{winner(game, True)} has stormed out to a 3-0 start. Few teams have looked stronger through "
         f"the opening stretch.",
-        f"Three games have produced three victories for {city_or_team(team)}. Their perfect record is becoming one of "
+        f"Three games have produced three victories for {winner(game)}. Their perfect record is becoming one of "
         f"the league's biggest stories.",
-        f"{city_or_team(team, True)} continued their unbeaten run with another impressive performance. A 3-0 "
+        f"{winner(game, True)} continued their unbeaten run with another impressive performance. A 3-0 "
         f"start has them sitting near the top of the standings.",
-        f"The momentum keeps building for {city_or_team(team)}. Their third straight win confirms this team is a "
+        f"The momentum keeps building for {winner(game)}. Their third straight win confirms this team is a "
         f"serious contender.",
-        f"{team.city} remains flawless through three weeks of action. The rest of the league is beginning to take "
-        f"notice."
+        f"{winner_city(game)} remains flawless through three weeks of action. The rest of the league is beginning to "
+        f"take notice."
     ]
 
     early_losers = [
-        f"The hole keeps getting deeper for {city_or_team(team)}. Three games into the season, they remain without a "
+        f"The hole keeps getting deeper for {loser(game)}. Three games into the season, they remain without a "
         f"victory.",
-        f"{city_or_team(team, True)} dropped to 0-3 after another disappointing result. Time is already "
+        f"{loser(game, True)} dropped to 0-3 after another disappointing result. Time is already "
         f"becoming a factor.",
-        f"The search for a breakthrough win continues for {city_or_team(team)}. Their third straight loss has created "
+        f"The search for a breakthrough win continues for {loser(game)}. Their third straight loss has created "
         f"a difficult situation.",
-        f"{city_or_team(team, True)} hoped this would be the week things changed. Instead, they remain winless "
+        f"{loser(game, True)} hoped this would be the week things changed. Instead, they remain winless "
         f"through three contests.",
-        f"The season is still young, but {team.city} is already facing an uphill climb. An 0-3 start leaves little "
-        f"margin for mistakes."
+        f"The season is still young, but {loser_city(game)} is already facing an uphill climb. An 0-3 start leaves "
+        f"little margin for mistakes."
     ]
 
     options = [fourth_week, early_winners, early_losers]
     weight = [5, 7, 6]
 
-    return [random.choice(options[headline_index]), weight[headline_index], team]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
 def down_the_stretch_headlines(team=None, game=None, headline_index=0):
     important_games = [
@@ -692,28 +711,28 @@ def down_the_stretch_headlines(team=None, game=None, headline_index=0):
     ]
 
     increasing_playoff_position = [
-        f"{city_or_team(team, True)} took a major step toward securing favorable playoff positioning. The "
+        f"{winner(game, True)} took a major step toward securing favorable playoff positioning. The "
         f"victory could pay dividends long after the regular season ends.",
-        f"The win was worth more than just another mark in the standings for {city_or_team(team)}. Their path toward "
+        f"The win was worth more than just another mark in the standings for {winner(game)}. Their path toward "
         f"a strong playoff seed looks much clearer now.",
-        f"{city_or_team(team, True)} strengthened its postseason outlook with a critical victory. Every "
+        f"{winner(game, True)} strengthened its postseason outlook with a critical victory. Every "
         f"advantage matters as the playoff race tightens.",
-        f"Timing could not have been better for {city_or_team(team)}. The win significantly improves their "
+        f"Timing could not have been better for {winner(game)}. The win significantly improves their "
         f"chances of entering the playoffs from a position of strength.",
-        f"{city_or_team(team, True)} may have secured one of the most important wins of its season. The "
+        f"{winner(game, True)} may have secured one of the most important wins of its season. The "
         f"result provides a valuable boost in the battle for playoff positioning."
     ]
 
     escaping_elimination = [
-        f"{city_or_team(team, True)} kept its season alive with a crucial victory. Elimination will have to "
+        f"{winner(game, True)} kept its season alive with a crucial victory. Elimination will have to "
         f"wait at least one more week.",
-        f"Facing enormous pressure, {city_or_team(team)} delivered exactly the result it needed. Their playoff hopes "
+        f"Facing enormous pressure, {winner(game)} delivered exactly the result it needed. Their playoff hopes "
         f"remain alive.",
-        f"{city_or_team(team, True)} refused to see its season come to an end. The win keeps the door open "
+        f"{winner(game, True)} refused to see its season come to an end. The win keeps the door open "
         f"for a postseason run.",
-        f"The situation was desperate, but {city_or_team(team)} responded with one of its biggest wins of the "
+        f"The situation was desperate, but {winner(game)} responded with one of its biggest wins of the "
         f"year. Their hopes are still breathing.",
-        f"{city_or_team(team, True)} entered the game with little room for error and emerged with a "
+        f"{winner(game, True)} entered the game with little room for error and emerged with a "
         f"lifeline. The fight for survival continues."
     ]
 
@@ -725,7 +744,7 @@ def down_the_stretch_headlines(team=None, game=None, headline_index=0):
     else:
         return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def final_week_headlines(team=None, game=None, headline_index=0):
+def final_week_headlines(game=None, headline_index=0):
     final_week = [
         "The regular season has reached its conclusion. Months of competition have led to this moment."
         "One final week remains in the race for postseason glory. Every game carries enormous implications."
@@ -758,28 +777,25 @@ def final_week_headlines(team=None, game=None, headline_index=0):
     ]
 
     last_chance = [
-        f"There is no room for error left for {city_or_team(team)}. Their final game is effectively a playoff game "
+        f"There is no room for error left for {loser(game)}. Their final game is effectively a playoff game "
         f"before the playoffs begin.",
-        f"{team.name} enter the last week knowing exactly what is required. A win is necessary to keep their "
-        f"postseason hopes alive.",
-        f"The path is simple for {city_or_team(team)} but far from easy. They must win in the final week or risk "
+        f"{loser_name(game, True)} enter the last week knowing exactly what is required. A win is necessary to "
+        f"keep their postseason hopes alive.",
+        f"The path is simple for {loser(game)} but far from easy. They must win in the final week or risk "
         f"seeing their season end.",
-        f"Every possession will matter when {city_or_team(team)} takes the field next week. Their playoff dreams "
+        f"Every possession will matter when {loser(game)} takes the field next week. Their playoff dreams "
         f"depend on securing a victory.",
-        f"{team.city} has reached the point where only one result matters. Anything short of a win could bring their "
-        f"season to a close."
+        f"{loser_city(game)} has reached the point where only one result matters. Anything short of a win could bring "
+        f"their season to a close."
     ]
 
     options = [final_week, important_games, last_chance]
     weight = [9, 10, 8]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
 # Playoff Headlines
-def playoff_headlines(team = None, game=None, headline_index = 0):
+def playoff_headlines(game=None, headline_index = 0):
     close_playoff_game = [
         f"Playoff intensity was on full display as {winner(game)} narrowly defeated {loser(game)}. Every possession "
         f"carried enormous weight.",
@@ -862,12 +878,9 @@ def playoff_headlines(team = None, game=None, headline_index = 0):
     options = [close_playoff_game, blowout_playoff_game, rivalry_playoff_game]
     weight = [10, 6, 9]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def conference_semis_headlines(team=None, game=None, headline_index=0):
+def conference_semis_headlines(game=None, headline_index=0):
     important_results = [
         f"The regular season ended with everything on the line, and {winner(game)} delivered. The result reshaped the "
         f"playoff picture at the final possible moment.",
@@ -892,65 +905,65 @@ def conference_semis_headlines(team=None, game=None, headline_index=0):
     ]
 
     playoffs_in = [
-        f"{team.city} has officially punched its ticket to the postseason. The opportunity to compete for a "
+        f"{winner_city(game)} has officially punched its ticket to the postseason. The opportunity to compete for a "
         f"championship remains alive.",
-        f"The playoff field is now set, and {city_or_team(team)} will be part of it. Their season continues.",
-        f"{city_or_team(team, True)} achieved one of its primary goals by securing a postseason berth. The "
+        f"The playoff field is now set, and {winner(game)} will be part of it. Their season continues.",
+        f"{winner(game, True)} achieved one of its primary goals by securing a postseason berth. The "
         f"real challenge now begins.",
-        f"The hard work of the regular season has paid off for {city_or_team(team)}. A playoff spot is officially "
+        f"The hard work of the regular season has paid off for {winner(game)}. A playoff spot is officially "
         f"theirs.",
-        f"{city_or_team(team, True)} will have a chance to compete on the postseason stage after securing "
+        f"{winner(game, True)} will have a chance to compete on the postseason stage after securing "
         f"qualification this week.",
-        f"The path was not always smooth, but {team.city} has reached the playoffs. Their championship hopes "
+        f"The path was not always smooth, but {winner_city(game)} has reached the playoffs. Their championship hopes "
         f"remain intact.",
-        f"{city_or_team(team, True)} did enough throughout the season to earn a place in the postseason. Fans "
+        f"{winner(game, True)} did enough throughout the season to earn a place in the postseason. Fans "
         f"now turn their attention to the playoffs.",
-        f"Celebration is in order for {city_or_team(team)}. Their season will continue beyond the regular schedule.",
-        f"The playoff dream is now reality for {city_or_team(team, True)}. They have officially secured "
+        f"Celebration is in order for {winner(game)}. Their season will continue beyond the regular schedule.",
+        f"The playoff dream is now reality for {winner(game, True)}. They have officially secured "
         f"their place in the bracket.",
-        f"{city_or_team(team)} survived the long regular season and emerged with a postseason berth. The next "
+        f"{winner(game)} survived the long regular season and emerged with a postseason berth. The next "
         f"chapter begins now.",
-        f"A playoff spot once seemed uncertain, but {city_or_team(team)} made it happen. Their season is far from "
+        f"A playoff spot once seemed uncertain, but {winner(game)} made it happen. Their season is far from "
         f"over.",
-        f"{city_or_team(team, True)} secured the result it needed and will be playing in the postseason. The "
+        f"{winner(game, True)} secured the result it needed and will be playing in the postseason. The "
         f"stakes only get higher from here.",
-        f"The door to the championship remains open for {city_or_team(team)} after clinching a playoff berth.",
-        f"{city_or_team(team, True)} earned its way into the postseason field. Every game from this point "
+        f"The door to the championship remains open for {winner(game)} after clinching a playoff berth.",
+        f"{winner(game, True)} earned its way into the postseason field. Every game from this point "
         f"forward will carry enormous importance.",
-        f"The regular season mission is complete for {city_or_team(team)}. They are headed to the playoffs."
+        f"The regular season mission is complete for {winner(game)}. They are headed to the playoffs."
     ]
 
     playoffs_out = [
-        f"The season has come to an end for {city_or_team(team)}. Their playoff hopes officially fell short.",
-        f"{city_or_team(team, True)} fought hard but will not be part of the postseason field. The offseason "
+        f"The season has come to an end for {loser(game)}. Their playoff hopes officially fell short.",
+        f"{loser(game, True)} fought hard but will not be part of the postseason field. The offseason "
         f"begins now.",
-        f"The playoff race proved too difficult for {city_or_team(team)} to overcome. Their season ends outside the "
+        f"The playoff race proved too difficult for {loser(game)} to overcome. Their season ends outside the "
         f"bracket.",
-        f"{city_or_team(team, True)} came up short in its pursuit of a postseason berth. The disappointment "
+        f"{loser(game, True)} came up short in its pursuit of a postseason berth. The disappointment "
         f"will linger into the offseason.",
-        f"The margin between success and failure was small, but {city_or_team(team)} landed on the wrong side of it. "
+        f"The margin between success and failure was small, but {loser(game)} landed on the wrong side of it. "
         f"Their season is over.",
-        f"{city_or_team(team, True)} will be watching the playoffs rather than participating in them. Their "
+        f"{loser(game, True)} will be watching the playoffs rather than participating in them. Their "
         f"campaign has reached its conclusion.",
-        f"The postseason dream slipped away from {city_or_team(team)} this week. There will be no second chance "
+        f"The postseason dream slipped away from {loser(game)} this week. There will be no second chance "
         f"this season.",
-        f"{city_or_team(team, True)} entered the year with playoff ambitions but ultimately fell short of "
+        f"{loser(game, True)} entered the year with playoff ambitions but ultimately fell short of "
         f"qualification.",
-        f"The final standings were not kind to {city_or_team(team)}. Their season ends before the postseason begins.",
-        f"{city_or_team(team, True)} could not secure a place in the playoff field. Attention now shifts "
+        f"The final standings were not kind to {loser(game)}. Their season ends before the postseason begins.",
+        f"{loser(game, True)} could not secure a place in the playoff field. Attention now shifts "
         f"toward next season."
     ]
 
     top_seeds = [
-        f"{city_or_team(team, True)} finished atop the division and earned a valuable first-round bye. The "
+        f"{winner(game, True)} finished atop the division and earned a valuable first-round bye. The "
         f"extra rest could prove crucial in the playoffs.",
-        f"The division crown belongs to {city_or_team(team)}. Along with it comes the reward of skipping the opening "
+        f"The division crown belongs to {winner(game)}. Along with it comes the reward of skipping the opening "
         f"round of the postseason.",
-        f"{city_or_team(team, True)} secured first place in the division and positioned itself perfectly for "
+        f"{winner(game, True)} secured first place in the division and positioned itself perfectly for "
         f"a championship run.",
-        f"A strong regular season paid off for {city_or_team(team)}. Their division title comes with the benefit of "
+        f"A strong regular season paid off for {winner(game)}. Their division title comes with the benefit of "
         f"a playoff bye.",
-        f"{city_or_team(team, True)} captured the division championship and earned extra time to prepare for "
+        f"{winner(game, True)} captured the division championship and earned extra time to prepare for "
         f"the postseason."
     ]
 
@@ -969,12 +982,9 @@ def conference_semis_headlines(team=None, game=None, headline_index=0):
     options = [important_results, playoffs_in, playoffs_out, top_seeds, upcoming_conference_semifinals]
     weight = [9, 9, 9, 10, 6]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def conference_finals_headlines(team=None, game=None, headline_index=0):
+def conference_finals_headlines(game=None, headline_index=0):
     important_results = [
         f"{winner(game, True)} survived the conference semifinal and moved one step closer to a "
         f"championship.",
@@ -988,22 +998,22 @@ def conference_finals_headlines(team=None, game=None, headline_index=0):
     ]
 
     team_moves_on = [
-        f"{city_or_team(team, True)} advanced beyond the conference semifinal and remains firmly in the "
+        f"{winner(game, True)} advanced beyond the conference semifinal and remains firmly in the "
         f"championship hunt.",
-        f"The conference semifinal hurdle has been cleared by {city_or_team(team)}. Their postseason run continues.",
-        f"{city_or_team(team, True)} earned advancement with a strong conference semifinal performance.",
-        f"The journey continues for {city_or_team(team)} after successfully navigating the conference semifinal round.",
-        f"{city_or_team(team, True)} kept its championship aspirations alive by advancing from the conference "
+        f"The conference semifinal hurdle has been cleared by {winner(game)}. Their postseason run continues.",
+        f"{winner(game, True)} earned advancement with a strong conference semifinal performance.",
+        f"The journey continues for {winner(game)} after successfully navigating the conference semifinal round.",
+        f"{winner(game, True)} kept its championship aspirations alive by advancing from the conference "
         f"semifinal."
     ]
 
     team_eliminated = [
-        f"The season came to an end for {city_or_team(team)} in the conference semifinal. Their playoff run stops "
+        f"The season came to an end for {loser(game)} in the conference semifinal. Their playoff run stops "
         f"here.",
-        f"{city_or_team(team, True)} fought hard but could not survive the conference semifinal round.",
-        f"The conference semifinal proved to be the final chapter of the season for {city_or_team(team)}.",
-        f"{city_or_team(team, True)} saw its championship hopes end with a conference semifinal defeat.",
-        f"The postseason journey is over for {city_or_team(team)} after falling in the conference semifinal."
+        f"{loser(game, True)} fought hard but could not survive the conference semifinal round.",
+        f"The conference semifinal proved to be the final chapter of the season for {loser(game)}.",
+        f"{loser(game, True)} saw its championship hopes end with a conference semifinal defeat.",
+        f"The postseason journey is over for {loser(game)} after falling in the conference semifinal."
     ]
 
     upcoming_conference_finals = [
@@ -1019,10 +1029,7 @@ def conference_finals_headlines(team=None, game=None, headline_index=0):
     options = [important_results, team_moves_on, team_eliminated, upcoming_conference_finals]
     weight = [10, 9, 6, 7]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
 
 def semifinals_headlines(team=None, game=None, headline_index=0):
@@ -1037,23 +1044,23 @@ def semifinals_headlines(team=None, game=None, headline_index=0):
     ]
 
     team_moves_on = [
-        f"{city_or_team(team, True)} advanced through the conference final and is now one step closer to a "
+        f"{winner(game, True)} advanced through the conference final and is now one step closer to a "
         f"title.",
-        f"The conference championship victory sends {city_or_team(team)} into the semifinals.",
-        f"{city_or_team(team, True)} earned advancement by winning one of the season's most important games.",
-        f"The conference final ended with {city_or_team(team)} celebrating a hard-fought victory and a place in the "
+        f"The conference championship victory sends {winner(game)} into the semifinals.",
+        f"{winner(game, True)} earned advancement by winning one of the season's most important games.",
+        f"The conference final ended with {winner(game)} celebrating a hard-fought victory and a place in the "
         f"semifinals.",
-        f"{team.city} continues its postseason journey after emerging victorious in the conference final."
+        f"{winner_city(game)} continues its postseason journey after emerging victorious in the conference final."
     ]
 
     team_eliminated = [
-        f"One win short of the next stage, {city_or_team(team)} saw its season end in the conference final.",
-        f"{city_or_team(team, True)} came close, but the conference final marked the end of its championship "
+        f"One win short of the next stage, {loser(game)} saw its season end in the conference final.",
+        f"{loser(game, True)} came close, but the conference final marked the end of its championship "
         f"pursuit.",
-        f"The conference final delivered heartbreak for {city_or_team(team)}. Their season is officially over.",
-        f"{city_or_team(team, True)} fell just short of advancing and now turns its attention toward the "
+        f"The conference final delivered heartbreak for {loser(game)}. Their season is officially over.",
+        f"{loser(game, True)} fell just short of advancing and now turns its attention toward the "
         f"offseason.",
-        f"The postseason run ended in the conference final for {city_or_team(team)} after a difficult defeat."
+        f"The postseason run ended in the conference final for {loser(game)} after a difficult defeat."
     ]
 
     upcoming_semifinals = [
@@ -1093,22 +1100,22 @@ def finals_headlines(team=None, game=None, headline_index=0):
     ]
 
     team_moves_on = [
-        f"{city_or_team(team, True)} advanced from the semifinal and secured a place in the championship game.",
-        f"The semifinal victory keeps the dream alive for {city_or_team(team)}. One challenge remains.",
-        f"{city_or_team(team, True)} punched its ticket to the final with an impressive postseason "
+        f"{winner(game, True)} advanced from the semifinal and secured a place in the championship game.",
+        f"The semifinal victory keeps the dream alive for {winner(game)}. One challenge remains.",
+        f"{winner(game, True)} punched its ticket to the final with an impressive postseason "
         f"performance.",
-        f"The reward for {city_or_team(team)} is a chance to compete for the championship after advancing from the "
+        f"The reward for {winner(game)} is a chance to compete for the championship after advancing from the "
         f"semifinal.",
-        f"{team.city} is headed to the title game after successfully navigating the semifinal round."
+        f"{winner_city(game)} is headed to the title game after successfully navigating the semifinal round."
     ]
 
     team_eliminated = [
-        f"{city_or_team(team, True)} came within one game of the championship but could not advance beyond "
+        f"{loser(game, True)} came within one game of the championship but could not advance beyond "
         f"the semifinal.",
-        f"The semifinal proved to be the final hurdle {city_or_team(team)} could not overcome.",
-        f"{city_or_team(team, True)} saw its title hopes come to an end with a semifinal defeat.",
-        f"The postseason journey is over for {city_or_team(team)} after falling in the semifinal round.",
-        f"{city_or_team(team, True)} fought its way deep into the playoffs but ultimately came up short in the "
+        f"The semifinal proved to be the final hurdle {loser(game)} could not overcome.",
+        f"{loser(game, True)} saw its title hopes come to an end with a semifinal defeat.",
+        f"The postseason journey is over for {loser(game)} after falling in the semifinal round.",
+        f"{loser(game, True)} fought its way deep into the playoffs but ultimately came up short in the "
         f"semifinal."
     ]
 
