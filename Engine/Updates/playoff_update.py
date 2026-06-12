@@ -1,6 +1,7 @@
 from Engine.Simulations.simulate_week import simulate_week_playoff
 from Engine.Updates.time_update import *
 from Engine.Processes.schedule_creator import *
+from Engine.Processes.headline_processor import update_headlines
 
 def team_updates_playoff(game):
     if game.winner == "home":
@@ -42,6 +43,7 @@ def weekly_update_playoff(league, season):
             create_finals_schedule(league, season)
         else:
             raise IndexError("Season Week out of range, did not complete season.")
+        update_headlines(season)
         return "playoff_results_new"
     else:
         crown_champion(league, season)

@@ -2,6 +2,7 @@ from Engine.Simulations.simulate_week import simulate_week
 from Engine.Updates.standing_update import update_standings
 from Engine.Updates.time_update import create_times
 from Engine.Processes.statistic_calculation import master_stats_return_team
+from Engine.Processes.headline_processor import update_headlines
 
 def get_prestige_info(league, team):
     league_rank = league.all_teams.index(team) + 1
@@ -99,8 +100,10 @@ def weekly_update(league, season):
     for team in league.all_teams:
         prestige_update(league, team)
     season_update(season)
+    update_headlines(season)
     if not season.playoff:
         create_times(season)
+
         return "weekly_results_new"
     else:
         return "weekly_results_final"

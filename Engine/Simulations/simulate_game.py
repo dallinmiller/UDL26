@@ -27,7 +27,7 @@ def rating_variation(game):
 
 def simulate_prep(game):
     variation = rating_variation(game)
-    home_rating = 15.2 + variation[0][0]
+    home_rating = 16 + variation[0][0]
     home_variability = 3 + variation[0][1]
     away_rating = 15 + variation[1][0]
     away_variability = 3 + variation[1][1]

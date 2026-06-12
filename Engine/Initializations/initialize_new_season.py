@@ -1,5 +1,6 @@
 from Engine.Updates.history_update import *
 from Engine.Updates.season_reset import *
+from Engine.Processes.headline_processor import update_headlines
 
 def initialize_new_season(league, season):
     league_history_update(league)
@@ -11,5 +12,7 @@ def initialize_new_season(league, season):
     reset_season(league, season)
     for team in league.all_teams:
         reset_team(team)
+
+    update_headlines(season)
 
     return "main"

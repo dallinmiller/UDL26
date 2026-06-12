@@ -2,6 +2,8 @@ import random
 
 # String Options
 def city_or_team(team, capital=False):
+    if team is None:
+        return ""
     if capital:
         city_or_team_table = [team.city, f"The {team.name}", f"The {team.city} {team.name}"]
     else:
@@ -10,36 +12,50 @@ def city_or_team(team, capital=False):
     return random.choice(city_or_team_table)
 
 def winner(game, capital=False):
+    if game is None:
+        return ""
     if game.winner == "home":
         return city_or_team(game.home_team, True) if capital else city_or_team(game.home_team)
     else:
         return city_or_team(game.away_team, True) if capital else city_or_team(game.away_team)
 
 def winner_city(game):
+    if game is None:
+        return ""
     return game.home_team.city if game.winner == "home" else game.away_team.city
 
 def loser_city(game):
+    if game is None:
+        return ""
     return game.home_team.city if game.winner == "away" else game.away_team.city
 
 def winner_name(game, capital=False):
+    if game is None:
+        return ""
     if capital:
         return f"The {game.home_team.name}" if game.winner == "home" else f"The {game.away_team.name}"
     else:
         return f"the {game.home_team.name}" if game.winner == "home" else f"the {game.away_team.name}"
 
 def loser_name(game, capital=False):
+    if game is None:
+        return ""
     if capital:
         return f"The {game.home_team.name}" if game.winner == "away" else f"The {game.away_team.name}"
     else:
         return f"the {game.home_team.name}" if game.winner == "away" else f"the {game.away_team.name}"
 
 def loser(game, capital=False):
+    if game is None:
+        return ""
     if game.winner == "home":
         return city_or_team(game.away_team, capital) if capital else city_or_team(game.away_team)
     else:
         return city_or_team(game.home_team, capital) if capital else city_or_team(game.home_team)
 
 def matchup(game, capital=False):
+    if game is None:
+        return ""
     cities = f"{game.home_team.city} vs {game.away_team.city}"
     if capital:
         names = f"The {game.home_team.name} vs the {game.away_team.name}"
@@ -48,6 +64,8 @@ def matchup(game, capital=False):
     return random.choice([cities, names])
 
 def matchup_and(game, capital=False):
+    if game is None:
+        return ""
     cities = f"{game.home_team.city} and {game.away_team.city}"
     if capital:
         names = f"The {game.home_team.name} and the {game.away_team.name}"
@@ -97,7 +115,7 @@ def top_team_headlines(game, headline_index):
     ]
 
     options = [does_it_again, scraped_by, surprising_loss]
-    weight = [7, 8, 10]
+    weight = [80, 85, 95]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -155,7 +173,7 @@ def contender_headlines(game, headline_index):
     ]
 
     options = [beat_top_team, surprising_loss, winning_streak, close_top_team]
-    weight = [10, 9, 8, 6]
+    weight = [95, 80, 75, 60]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -211,7 +229,7 @@ def middler_headlines(game, headline_index):
     ]
 
     options = [beat_top_team, close_top_team, winning_streak, facing_elimination]
-    weight = [9, 6, 7, 6]
+    weight = [90, 55, 70, 60]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -268,7 +286,7 @@ def bottom_feeder_headlines(game, headline_index):
     ]
 
     options = [loses_again, upset, winning_streak, elimination]
-    weight = [4, 7, 5, 5]
+    weight = [35, 80, 60, 45]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -314,21 +332,21 @@ def close_game_headlines(game, headline_index):
     ]
 
     options = [small_margin, overtime, almost_upset]
-    weight = [8, 8, 7]
+    weight = [80, 85, 70]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
 def blowout_headlines(game, headline_index):
     large_margin = [
         f"The outcome was effectively decided long before the game ended. {winner(game, True)} controlled the "
-        f"matchup from start to finish."
+        f"matchup from start to finish.",
         f"{winner(game, True)} put together a performance that bordered on perfection. "
-        f"{loser(game, True)} never found a way back into the game."
+        f"{loser(game, True)} never found a way back into the game.",
         f"What looked competitive on paper quickly turned into a one-sided affair. {winner(game, True)} was "
-        f"simply too much to handle."
+        f"simply too much to handle.",
         f"{winner(game, True)} imposed its will early and never looked back. The final result was as "
-        f"decisive as they come."
-        f"Every phase of the game tilted heavily in favor of {winner}. The scoreboard reflected complete domination."
+        f"decisive as they come.",
+        f"Every phase of the game tilted heavily in favor of {winner(game)}. The scoreboard reflected complete domination."
     ]
 
     expected_blowout = [
@@ -358,7 +376,7 @@ def blowout_headlines(game, headline_index):
     ]
 
     options = [large_margin, expected_blowout, surprise_blowout]
-    weight = [5, 4, 7]
+    weight = [50, 25, 75]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -426,7 +444,7 @@ def rivalry_headlines(game, headline_index):
     ]
 
     options = [upcoming_rivalry, rivalry_close, rivalry_overtime, rivalry_blowout]
-    weight = [8, 9, 9, 7]
+    weight = [80, 90, 95, 70]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -493,13 +511,13 @@ def tight_race_headlines(game, headline_index):
     ]
 
     options = [upcoming_tight, tight_close, tight_overtime, tight_blowout]
-    weight = [8, 8, 9, 8]
+    weight = [85, 90, 95, 80]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
 
 # Week Headlines
-def first_week_headlines(team=None, headline_index=0):
+def first_week_headlines(team=(None, None), headline_index=0):
     first_week = [
         f"A new season is officially underway. Every team still believes a championship is possible.",
         f"The wait is over as another season begins. Expectations are high across the league.",
@@ -516,32 +534,32 @@ def first_week_headlines(team=None, headline_index=0):
     ]
 
     champ = [
-        f"{team.city} enters the new season with a target on their back. Defending a championship is never easy.",
-        f"The reigning champions are back in action. {city_or_team(team, True)} will attempt to prove last "
+        f"{team[0]} enters the new season with a target on their back. Defending a championship is never easy.",
+        f"The reigning champions are back in action. The {team[1]} will attempt to prove last "
         f"season was no fluke.",
-        f"A new season begins, but the {team.name} still hold the title everyone wants. The defense for the "
+        f"A new season begins, but the {team[1]} still hold the title everyone wants. The defense for the "
         f"championship starts now.",
-        f"Every contender will be chasing {city_or_team(team)} this season. The defending champions are ready for the "
+        f"Every contender will be chasing {team[0]} this season. The defending champions are ready for the "
         f"challenge.",
-        f"The banner may belong to last season, but expectations remain sky-high. {city_or_team(team, True)} "
+        f"The banner may belong to last season, but expectations remain sky-high. {team[0]} "
         f"begin their quest for another title."
     ]
 
     last_year_contenders = [
-        f"{city_or_team(team, True)} came close to reaching the top last season. Now they begin another "
+        f"{team[0]} came close to reaching the top last season. Now they begin another "
         f"attempt to finish the job.",
-        f"Last season ended in disappointment, but {team.city} enters the new year with championship "
+        f"Last season ended in disappointment, but {team[0]} enters the new year with championship "
         f"ambitions intact.",
-        f"{city_or_team(team, True)} spent the offseason thinking about what might have been. The opportunity "
+        f"The {team[1]} spent the offseason thinking about what might have been. The opportunity "
         f"for redemption starts now.",
-        f"Few teams were closer to a title than {city_or_team(team)} last season. They now begin a new campaign "
+        f"Few teams were closer to a title than the {team[1]} last season. They now begin a new campaign "
         f"determined to go one step further.",
-        f"The hunger remains strong for {city_or_team(team)} after last season's near miss. Expectations "
+        f"The hunger remains strong for {team[0]} after last season's near miss. Expectations "
         f"are once again running high."
     ]
 
     options = [first_week, champ, last_year_contenders]
-    weight = [10, 10, 8]
+    weight = [0, 0, 80]
 
     return [random.choice(options[headline_index]), weight[headline_index], team]
 
@@ -562,7 +580,7 @@ def second_week_headlines(game=None, headline_index=0):
     early_winners = [
         f"{winner(game, True)} could not have asked for a better start. They open the season with a "
         f"1-0 record.",
-        f"The first week is complete, and {winner_city} sits undefeated. It is only one game, but it is a "
+        f"The first week is complete, and {winner_city(game)} sits undefeated. It is only one game, but it is a "
         f"promising beginning.",
         f"{winner(game, True)} started the season on the right foot with an opening-week victory. Early "
         f"momentum can be valuable.",
@@ -580,7 +598,7 @@ def second_week_headlines(game=None, headline_index=0):
     ]
 
     early_losers = [
-        f"{loser_city} opens the season searching for answers after falling to 0-1. Not the ideal start, but there is "
+        f"{loser_city(game)} opens the season searching for answers after falling to 0-1. Not the ideal start, but there is "
         f"still plenty of time to recover.",
         f"The season is only one week old, but {loser(game)} already find themselves playing from behind. "
         f"Their opener ended in defeat.",
@@ -602,20 +620,20 @@ def second_week_headlines(game=None, headline_index=0):
     ]
 
     options = [second_week, early_winners, early_losers]
-    weight = [8, 7, 6]
+    weight = [0, 80, 60]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
 def third_week_headlines(game=None, headline_index=0):
     third_week = [
         "With two weeks in the books, early trends are beginning to emerge. Some teams are validating expectations "
-        "while others are searching for answers."
+        "while others are searching for answers.",
         "The season is still young, but week two provided valuable clues about the league's true contenders. Every "
-        "win is becoming more meaningful."
+        "win is becoming more meaningful.",
         "Two weeks of action have already produced several surprises. Teams are beginning to separate themselves from "
-        "the pack."
+        "the pack.",
         "The opening excitement has settled into reality as week two comes to a close. Some early success stories "
-        "appear legitimate."
+        "appear legitimate.",
         "Week two reinforced one important lesson: no team can afford to fall behind. The standings are beginning to "
         "take shape."
     ]
@@ -647,7 +665,7 @@ def third_week_headlines(game=None, headline_index=0):
     ]
 
     options = [third_week, early_winners, early_losers]
-    weight = [7, 7, 6]
+    weight = [0, 80, 55]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -692,11 +710,11 @@ def fourth_week_headlines(game=None, headline_index=0):
     ]
 
     options = [fourth_week, early_winners, early_losers]
-    weight = [5, 7, 6]
+    weight = [0, 75, 65]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def down_the_stretch_headlines(team=None, game=None, headline_index=0):
+def down_the_stretch_headlines(game=None, headline_index=0):
     important_games = [
         f"With the season winding down, the upcoming matchup between {matchup_and(game)} could have major playoff "
         f"implications. Neither team can afford to give ground at this stage.",
@@ -737,28 +755,25 @@ def down_the_stretch_headlines(team=None, game=None, headline_index=0):
     ]
 
     options = [important_games, increasing_playoff_position, escaping_elimination]
-    weight = [8, 7, 7]
+    weight = [95, 85, 80]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
 def final_week_headlines(game=None, headline_index=0):
     final_week = [
-        "The regular season has reached its conclusion. Months of competition have led to this moment."
-        "One final week remains in the race for postseason glory. Every game carries enormous implications."
+        "The regular season has reached its conclusion. Months of competition have led to this moment.",
+        "One final week remains in the race for postseason glory. Every game carries enormous implications.",
         "The playoff picture is nearly complete, but several critical questions remain unanswered. The final week "
-        "promises drama."
-        "There are no more second chances after this week. Teams must seize the opportunities still in front of them."
+        "promises drama.",
+        "There are no more second chances after this week. Teams must seize the opportunities still in front of them.",
         "Championship dreams remain alive for some, while others are simply trying to extend their season. The "
-        "stakes have never been higher."
-        "The regular season's final chapter is here. Every result could reshape the playoff bracket."
-        "Months of hard work now come down to a single week. Teams across the league are feeling the pressure."
+        "stakes have never been higher.",
+        "The regular season's final chapter is here. Every result could reshape the playoff bracket.",
+        "Months of hard work now come down to a single week. Teams across the league are feeling the pressure.",
         "For contenders, the goal is clear: enter the postseason with momentum. For everyone else, survival remains "
-        "the priority."
+        "the priority.",
         "The standings may look settled, but the final week has a habit of producing surprises. Nothing is "
-        "guaranteed until the final whistle."
+        "guaranteed until the final whistle.",
         "One last round of games stands between the league and the playoffs. The road to the championship is "
         "about to begin in earnest."
     ]
@@ -790,7 +805,7 @@ def final_week_headlines(game=None, headline_index=0):
     ]
 
     options = [final_week, important_games, last_chance]
-    weight = [9, 10, 8]
+    weight = [0, 100, 80]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -803,7 +818,7 @@ def playoff_headlines(game=None, headline_index = 0):
         f"over {loser(game)}.",
         f"There was little separating the teams throughout the playoff battle. {winner(game, True)} made just "
         f"enough plays to survive.",
-        f"The margin between victory and defeat was razor-thin. {winner(game), True} came out on top in a "
+        f"The margin between victory and defeat was razor-thin. {winner(game, True)} came out on top in a "
         f"game that could have gone either way.",
         f"Fans witnessed playoff drama at its finest. {winner(game, True)} edged out {loser(game)} in a tense "
         f"contest.",
@@ -876,7 +891,7 @@ def playoff_headlines(game=None, headline_index = 0):
     ]
 
     options = [close_playoff_game, blowout_playoff_game, rivalry_playoff_game]
-    weight = [10, 6, 9]
+    weight = [95, 60, 100]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -980,7 +995,7 @@ def conference_semis_headlines(game=None, headline_index=0):
     ]
 
     options = [important_results, playoffs_in, playoffs_out, top_seeds, upcoming_conference_semifinals]
-    weight = [9, 9, 9, 10, 6]
+    weight = [100, 80, 75, 75, 85]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
@@ -1027,12 +1042,12 @@ def conference_finals_headlines(game=None, headline_index=0):
     ]
 
     options = [important_results, team_moves_on, team_eliminated, upcoming_conference_finals]
-    weight = [10, 9, 6, 7]
+    weight = [90, 75, 50, 75]
 
     return [random.choice(options[headline_index]), weight[headline_index], game]
 
 
-def semifinals_headlines(team=None, game=None, headline_index=0):
+def semifinals_headlines(game=None, headline_index=0):
     important_results = [
         f"{winner(game, True)} claimed the conference championship and earned a place in the semifinals.",
         f"The conference title belongs to {winner(game)} after a memorable postseason victory.",
@@ -1077,14 +1092,11 @@ def semifinals_headlines(team=None, game=None, headline_index=0):
     ]
 
     options = [important_results, team_moves_on, team_eliminated, upcoming_semifinals]
-    weight = [10, 9, 6, 8]
+    weight = [90, 75, 50, 75]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
 
-def finals_headlines(team=None, game=None, headline_index=0):
+def finals_headlines(game=None, headline_index=0):
     important_results = [
         f"{winner(game, True)} secured a place in the championship game with a hard-earned semifinal victory.",
         f"The semifinal ended with celebration for {winner(game)}. They are now one win away from a title.",
@@ -1143,9 +1155,6 @@ def finals_headlines(team=None, game=None, headline_index=0):
     ]
 
     options = [important_results, team_moves_on, team_eliminated, upcoming_finals]
-    weight = [10, 9, 6, 10]
+    weight = [90, 85, 50, 0]
 
-    if game is None:
-        return [random.choice(options[headline_index]), weight[headline_index], team]
-    else:
-        return [random.choice(options[headline_index]), weight[headline_index], game]
+    return [random.choice(options[headline_index]), weight[headline_index], game]
