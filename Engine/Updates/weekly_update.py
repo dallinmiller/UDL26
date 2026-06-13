@@ -3,6 +3,7 @@ from Engine.Updates.standing_update import update_standings
 from Engine.Updates.time_update import create_times
 from Engine.Processes.statistic_calculation import master_stats_return_team
 from Engine.Processes.headline_processor import update_headlines
+from Interface.utility_functions import *
 
 def get_prestige_info(league, team):
     league_rank = league.all_teams.index(team) + 1
@@ -56,6 +57,36 @@ def prestige_update(league, team):
 
     team.prestige = prestige
 
+def playoff_standing_update(league, season):
+    for team in league.all_teams:
+        if team.playoff_eliminated or team.playoff_clinched:
+            continue
+
+        if team.playoff_eliminated and team.playoff_near_eliminated:
+            team.playoff_near_eliminated = False
+
+        if league.conferences[team.conference].index(team) < league.playoff_cutoff:
+            if league.conferences[team.conference][league.playoff_cutoff].wins + (len(season.season_schedule) -
+                                                                              len(season.season_results) - 1) < team.wins:
+                team.playoff_clinched = True
+                team.playoff_near_eliminated = False
+        else:
+            if team.wins + (len(season.season_schedule) - len(season.season_results) - 1) < league.conferences[team.conference][league.playoff_cutoff - 1].wins:
+                team.playoff_eliminated = True
+            if team.wins + (len(season.season_schedule) - len(season.season_results) - 1) == league.conferences[team.conference][league.playoff_cutoff - 1].wins:
+                team.playoff_near_eliminated = True
+
+        print(season.week)
+
+        if season.week == 14:
+            team.playoff_near_eliminated = False
+            if league.conferences[team.conference].index(team) < league.playoff_cutoff:
+                team.playoff_clinched = True
+            else:
+                team.playoff_eliminated = True
+
+
+
 def team_updates(game):
     if game.winner == "home":
         game.home_team.wins += 1
@@ -99,6 +130,7 @@ def weekly_update(league, season):
     update_standings(league)
     for team in league.all_teams:
         prestige_update(league, team)
+    playoff_standing_update(league, season)
     season_update(season)
     update_headlines(season)
     if not season.playoff:

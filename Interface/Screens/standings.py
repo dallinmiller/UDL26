@@ -6,7 +6,9 @@ def print_standings(league, UI_next="standings"):
     all_teams = league.all_teams
     standings_table.append(["", "", "", "", ""])
     for team in all_teams:
-        standings_table.append([all_teams.index(team) + 1, f"{team.city} {team.name}", team.wins,
+        standings_table.append([all_teams.index(team) + 1,
+                                f"{team.city} {team.name} {'(x)' if team.playoff_eliminated else '(z)' if team.playoff_clinched else ''}",
+                                team.wins,
                                 team.losses, team.return_score_differential()])
 
     headers = ["League", "Team", "Wins", "Losses", "Score Differential"]
@@ -25,7 +27,9 @@ def print_division_standings(league, UI_next="standings"):
         standings_table.append(["", "", "", "", ""])
         standings_table.append([division_names[divisions.index(division)], "", "", "", ""])
         for team in division:
-            standings_table.append([division.index(team) + 1, f"{team.city} {team.name}", team.wins,
+            standings_table.append([division.index(team) + 1,
+                                    f"{team.city} {team.name} {'(x)' if team.playoff_eliminated else '(z)' if team.playoff_clinched else ''}",
+                                    team.wins,
                                     team.losses, team.return_score_differential()])
 
     headers = ["Division", "Team", "Wins", "Losses", "Score Differential"]
@@ -45,7 +49,9 @@ def print_conference_standings(league, UI_next="standings"):
         standings_table.append(["", "", "", "", ""])
         standings_table.append([conference_names[conferences.index(conference)], "", "", "", ""])
         for team in conference:
-            standings_table.append([conference.index(team) + 1, f"{team.city} {team.name}", team.wins,
+            standings_table.append([conference.index(team) + 1,
+                                    f"{team.city} {team.name} {'(x)' if team.playoff_eliminated else '(z)' if team.playoff_clinched else ''}",
+                                    team.wins,
                                     team.losses, team.return_score_differential()])
 
     headers = ["Conference", "Team", "Wins", "Losses", "Score Differential"]

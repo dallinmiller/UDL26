@@ -151,18 +151,18 @@ def print_weekly_results(season, UI_next="schedule"):
             week_table.append([
                 game.match_time if game.match_time != "Time not set" else "",
                 f"{game.score_home}",
-                game.home_team.city,
+                f"{game.home_team.city}",
                 "vs",
-                game.away_team.city,
+                f"{game.away_team.city}",
                 f"{game.score_away}"
             ])
         else:
             week_table.append([
                 game.match_time if game.match_time != "Time not set" else "",
                 "-",
-                game.home_team.city,
+                f"{game.home_team.city}",
                 "vs",
-                game.away_team.city,
+                f"{game.away_team.city}",
                 "-"
             ])
 

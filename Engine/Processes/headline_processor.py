@@ -1,4 +1,5 @@
 from Assets.Text.Headlines import *
+from Interface.utility_functions import *
 from History.histories import league_histories
 import random
 from difflib import SequenceMatcher
@@ -153,6 +154,7 @@ def headline_harvest(season):
                 headlines.append(fourth_week_headlines(game, 1))
             if game_winner.lose_streak == 3:
                 headlines.append(fourth_week_headlines(game, 2))
+        ### TODO: Test pre-playoff conditions
         if season.week >= 9 and not season.playoff:
             if team_status[0] == "contender" or team_status[0] == "top_team":
                 headlines.append(down_the_stretch_headlines(game, 1))
@@ -211,7 +213,7 @@ def headline_harvest(season):
                     headlines.append(final_week_headlines(game, 1))
 
     if season.playoff and season.playoff_week != 0:
-        for game in season.playoff_results[season.playoff_week - 3]:
+        for game in season.playoff_results[season.playoff_week - 2]:
             game_winner = game.home_team if game.winner == "home" else game.away_team
             game_loser = game.home_team if game.winner == "away" else game.away_team
 

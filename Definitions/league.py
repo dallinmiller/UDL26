@@ -4,6 +4,7 @@ class League:
         self.league = teams
         self.user_team = None
         self.game_id = 0
+        self.playoff_cutoff = 3
         
         self.conferences = {
             "aac": self.league[:4],

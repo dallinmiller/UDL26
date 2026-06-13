@@ -1138,8 +1138,7 @@ def finals_headlines(game=None, headline_index=0):
         f"A championship is on the line when {matchup_and(game)} meet in the season's final showdown.",
         f"The wait is almost over. {matchup(game, True)} will decide who lifts the trophy.",
         f"Months of competition have produced one final matchup. {matchup_and(game, True)} now stand at the "
-        f"center of "
-        f"the spotlight.",
+        f"center of the spotlight.",
         f"The championship stage is set for {matchup_and(game)}. Neither team is more than one win away from glory.",
         f"Fans could hardly ask for a better ending to the season than {matchup(game)} in the final.",
         f"The road to a championship ends here. {matchup_and(game, True)} will determine who claims the title.",
