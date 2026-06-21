@@ -5,6 +5,7 @@ from Interface.Screens.admin import *
 from Interface.Screens.standings import *
 from Interface.Screens.statistics import *
 from Interface.Screens.schedules_playoffs import *
+from Interface.Screens.archives import *
 from Interface.Screens.statistics_playoffs import *
 from Engine.Initializations.playoff_initialization import *
 from Engine.Initializations.initialize_new_season import *
@@ -59,6 +60,10 @@ def game_control(league, season):
         "team_schedule": lambda: print_team(season, league.user_team),
     }
 
+    archive_screens = {
+        "print_rivalries": lambda: print_rivalries(league)
+    }
+
     playoff_screens = {
         "print_schedule_playoff": lambda: print_schedule_playoff(season),
         "upcoming_schedule_playoff": lambda: print_upcoming_schedule_playoff(season),
@@ -90,6 +95,10 @@ def game_control(league, season):
         "playoff_full_stats": lambda: master_stats_menu_playoff(league)
     }
 
+    playoff_archive_screens = {
+        "print_rivalries_playoff": lambda: print_rivalries(league, UI_next="playoff_archive")
+    }
+
     processes = {
         "sim_week": lambda: weekly_update(league, season),
         "playoff_init": lambda: playoff_initialization(league, season),
@@ -101,8 +110,9 @@ def game_control(league, season):
         "playoff_test": lambda:weekly_update(league, season)
     }
 
-    all_paths = [menus, schedule_screens, admin_screens, standings_screens, statistics_screens, playoff_screens,
-                 playoff_admin_screens, playoff_standings_screens, playoff_stats_screens]
+    all_paths = [menus, schedule_screens, admin_screens, standings_screens, statistics_screens, archive_screens,
+                 playoff_screens, playoff_admin_screens, playoff_standings_screens, playoff_stats_screens,
+                 playoff_archive_screens]
 
     UI_state = "main"
     path_exists = False

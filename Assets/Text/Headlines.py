@@ -214,17 +214,17 @@ def middler_headlines(game, headline_index):
         f"{winner(game, True)} extended their winning streak and strengthened their postseason hopes. "
         f"Confidence is growing throughout the organization.",
         f"What once looked like a middle-of-the-pack team is beginning to look much more dangerous. "
-        f"{winner_city} is on a roll."
+        f"{winner_city(game)} is on a roll."
     ]
 
     facing_elimination = [
         f"{loser(game, True)} finds themselves in a must-win situation after another difficult week. "
-        f"Their playoff hopes are hanging by a thread."
+        f"Their playoff hopes are hanging by a thread.",
         f"The margin for error has disappeared for {loser(game)}. Every remaining game now carries "
-        f"enormous importance."
+        f"enormous importance.",
         f"{loser_city(game)} is running out of opportunities to save its season after its loss against "
-        f"{winner(game)}. Another loss could end their playoff dreams."
-        f"The pressure continues to mount on {loser(game)}. Their postseason future remains uncertain."
+        f"{winner(game)}. Another loss could end their playoff dreams.",
+        f"The pressure continues to mount on {loser(game)}. Their postseason future remains uncertain.",
         f"Time is running out for {loser(game)}. The next few weeks may determine the fate of their season."
     ]
 

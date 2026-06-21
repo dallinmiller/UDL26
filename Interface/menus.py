@@ -5,6 +5,14 @@ from History.histories import league_histories
 
 def main_menu(league, season):
     upcoming_week(season, False,None)
+    team_id_2 = None
+    for game in season.season_schedule[season.week - 1]:
+        if game.home_team == league.user_team:
+            team_id_2 = game.away_team.league_index
+        elif game.away_team == league.user_team:
+            team_id_2 = game.home_team.league_index
+    key = tuple(sorted((14, team_id_2)))
+    print(f"This week's rivalry score: {league.rivalries[key]}")
 
     print("\n-----HEADLINES-----\n")
     for headline in season.headlines:
@@ -48,7 +56,7 @@ def schedule_menu():
 
     return options[choice - 1][1]
 
-def admin_menu():
+def admin_menu(UI_next="main"):
     options = [
         ("Season Status", "season_status"),
         ("Back", "main")
@@ -57,10 +65,17 @@ def admin_menu():
     labels = [label for label, _ in options]
 
     choice = create_menu("Select an Option", labels)
-
     clear_screen()
 
-    return options[choice - 1][1]
+    if UI_next == "main":
+        return options[choice - 1][1]
+    elif UI_next == "playoff":
+        if options[choice - 1][0] == "Back":
+            return UI_next
+        else:
+            return options[choice - 1][1] + "_playoff"
+    else:
+        raise ValueError("Invalid UI_next")
 
 def standings_menu(UI_next="main"):
     options = [
@@ -112,6 +127,7 @@ def stats_menu(UI_next="main"):
 
 def archive_menu(UI_next="main"):
     options = [
+        ("Print Rivalries", "print_rivalries"),
         ("Back", UI_next)
     ]
 

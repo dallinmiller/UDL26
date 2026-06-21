@@ -176,7 +176,7 @@ def headline_harvest(season):
     if not season.playoff:
         for game in season.season_schedule[season.week - 1]:
             game_home = game.home_team
-            game_away = game.home_team
+            game_away = game.away_team
 
             teams = [game_home, game_away]
 
@@ -201,6 +201,8 @@ def headline_harvest(season):
                         team_status[team_index] = "bottom"
 
             if game.rivalry:
+                print(f"{game_home.city} rivalry with {game_away.city}")
+                get_continue()
                 headlines.append(rivalry_headlines(game, 0))
             if game.tight_race:
                 headlines.append(tight_race_headlines(game, 0))

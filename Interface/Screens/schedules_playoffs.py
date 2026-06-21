@@ -71,7 +71,7 @@ def print_results_playoff(season):
                     "-"
                 ])
 
-        headers = [f"{week_names[season.playoff_week - 1]}", "", "Home Team", "", "Away Team", ""]
+        headers = [f"{week_names[i - 1]}", "", "Home Team", "", "Away Team", ""]
         print(tabulate(week_table, headers=headers, tablefmt="grid"))
         print("\n\n")
 

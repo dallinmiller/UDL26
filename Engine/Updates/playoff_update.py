@@ -1,22 +1,24 @@
 from Engine.Simulations.simulate_week import simulate_week_playoff
 from Engine.Updates.time_update import *
+from Engine.Updates.rivalry_update import update_rivalry, update_rivalry_week
 from Engine.Processes.schedule_creator import *
 from Engine.Processes.headline_processor import update_headlines
 
-def team_updates_playoff(game):
-    if game.winner == "home":
-        game.home_team.playoff_wins += 1
-        game.away_team.playoff_losses += 1
-    else:
-        game.home_team.playoff_losses += 1
-        game.away_team.playoff_wins += 1
+def team_updates_playoff(season):
+    for game in season.playoff_schedule[season.playoff_week - 1]:
+        if game.winner == "home":
+            game.home_team.playoff_wins += 1
+            game.away_team.playoff_losses += 1
+        else:
+            game.home_team.playoff_losses += 1
+            game.away_team.playoff_wins += 1
 
-    game.home_team.playoff_total_points += game.score_home
-    game.home_team.playoff_scores += game.score_home
-    game.home_team.playoff_opponent_points += game.score_away
-    game.away_team.playoff_total_points += game.score_away
-    game.away_team.playoff_scores += game.score_away
-    game.away_team.playoff_opponent_points += game.score_home
+        game.home_team.playoff_total_points += game.score_home
+        game.home_team.playoff_scores += game.score_home
+        game.home_team.playoff_opponent_points += game.score_away
+        game.away_team.playoff_total_points += game.score_away
+        game.away_team.playoff_scores += game.score_away
+        game.away_team.playoff_opponent_points += game.score_home
 
 def season_update_playoff(season):
     if season.playoff_week < 4:
@@ -29,8 +31,8 @@ def season_update_playoff(season):
 
 def weekly_update_playoff(league, season):
     simulate_week_playoff(season)
-    for game in season.playoff_schedule[season.playoff_week - 1]:
-        team_updates_playoff(game)
+    team_updates_playoff(season)
+    update_rivalry(league, season)
     season_update_playoff(season)
     if not season.complete:
         if season.playoff_week == 2:
@@ -43,6 +45,7 @@ def weekly_update_playoff(league, season):
             create_finals_schedule(league, season)
         else:
             raise IndexError("Season Week out of range, did not complete season.")
+        update_rivalry_week(league, season)
         update_headlines(season)
         return "playoff_results_new"
     else:

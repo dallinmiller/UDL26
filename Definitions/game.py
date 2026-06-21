@@ -7,7 +7,7 @@ class Game:
         self.prestige = 0
         self.rivalry = False
         self.tight_race = False
-        self.playoff_implications = False
+        self.playoff_implication = False
         self.playoff = False
         self.match_time = "Time not set"
         self.score_home = 0

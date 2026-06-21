@@ -20,6 +20,9 @@ class League:
 
         self.all_teams = self.divisions["front"] + self.divisions["back"]
 
+        self.rivalries = {}
+        self.rivalries_added = 0
+
         self.standings_sorted = True
 
         self.playoff_teams = {}
@@ -29,6 +32,7 @@ class League:
         self.champion = None
 
         self.reset_values = {
+            "rivalries_added": 0,
             "playoff_teams": {},
             "conference_final_teams": {},
             "semifinal_teams": {},

@@ -1,6 +1,7 @@
 from Engine.Simulations.simulate_week import simulate_week
 from Engine.Updates.standing_update import update_standings
 from Engine.Updates.time_update import create_times
+from Engine.Updates.rivalry_update import update_rivalry, update_rivalry_week
 from Engine.Processes.statistic_calculation import master_stats_return_team
 from Engine.Processes.headline_processor import update_headlines
 from Interface.utility_functions import *
@@ -41,21 +42,30 @@ def get_prestige_info(league, team):
 
     return league_rank, conference_leader, ppg_leader, oppg_leader
 
-def prestige_update(league, team):
-    rank, conference_leader, ppg_leader, oppg_leader = get_prestige_info(league, team)
-    if rank <= 8:
-        prestige = 4 - (1 / 8) * rank
-    else:
-        prestige = 3 - (3 / 64) * (rank - 8) ** 2
+def prestige_update(league):
+    for team in league.all_teams:
+        rank, conference_leader, ppg_leader, oppg_leader = get_prestige_info(league, team)
+        if rank <= 8:
+            prestige = 4 - (1 / 8) * rank
+        else:
+            prestige = 3 - (3 / 64) * (rank - 8) ** 2
 
-    if conference_leader:
-        prestige += 0.5
-    if ppg_leader:
-        prestige += 0.5
-    if oppg_leader:
-        prestige += 0.5
+        if conference_leader:
+            prestige += 0.5
+        if ppg_leader:
+            prestige += 0.5
+        if oppg_leader:
+            prestige += 0.5
 
-    team.prestige = prestige
+        team.prestige = prestige
+
+def playoff_implications_update(season):
+    for game in season.season_schedule[season.week - 1]:
+        if game.home_team.playoff_near_eliminated or game.away_team.playoff_near_eliminated:
+            game.playoff_implication = True
+
+        if season.week > 10 and abs(game.home_team.wins - game.away_team.wins) < 0 and game.home_team.conference == game.away_team.conference:
+            game.tight_race = True
 
 def playoff_standing_update(league, season):
     for team in league.all_teams:
@@ -76,8 +86,6 @@ def playoff_standing_update(league, season):
             if team.wins + (len(season.season_schedule) - len(season.season_results) - 1) == league.conferences[team.conference][league.playoff_cutoff - 1].wins:
                 team.playoff_near_eliminated = True
 
-        print(season.week)
-
         if season.week == 14:
             team.playoff_near_eliminated = False
             if league.conferences[team.conference].index(team) < league.playoff_cutoff:
@@ -85,34 +93,33 @@ def playoff_standing_update(league, season):
             else:
                 team.playoff_eliminated = True
 
+def team_updates(season):
+    for game in season.season_schedule[season.week - 1]:
+        if game.winner == "home":
+            game.home_team.wins += 1
+            game.home_team.win_loss += 1
+            game.home_team.win_streak += 1
+            game.home_team.lose_streak = 0
+            game.away_team.losses += 1
+            game.away_team.win_loss -= 1
+            game.away_team.lose_streak += 1
+            game.away_team.win_streak = 0
+        else:
+            game.home_team.losses += 1
+            game.home_team.win_loss -= 1
+            game.home_team.lose_streak += 1
+            game.home_team.win_streak = 0
+            game.away_team.wins += 1
+            game.away_team.win_loss += 1
+            game.away_team.win_streak += 1
+            game.away_team.lose_streak = 0
 
-
-def team_updates(game):
-    if game.winner == "home":
-        game.home_team.wins += 1
-        game.home_team.win_loss += 1
-        game.home_team.win_streak += 1
-        game.home_team.lose_streak = 0
-        game.away_team.losses += 1
-        game.away_team.win_loss -= 1
-        game.away_team.lose_streak += 1
-        game.away_team.win_streak = 0
-    else:
-        game.home_team.losses += 1
-        game.home_team.win_loss -= 1
-        game.home_team.lose_streak += 1
-        game.home_team.win_streak = 0
-        game.away_team.wins += 1
-        game.away_team.win_loss += 1
-        game.away_team.win_streak += 1
-        game.away_team.lose_streak = 0
-
-    game.home_team.total_points += game.score_home
-    game.home_team.scores += game.score_home
-    game.home_team.opponent_points += game.score_away
-    game.away_team.total_points += game.score_away
-    game.away_team.scores += game.score_away
-    game.away_team.opponent_points += game.score_home
+        game.home_team.total_points += game.score_home
+        game.home_team.scores += game.score_home
+        game.home_team.opponent_points += game.score_away
+        game.away_team.total_points += game.score_away
+        game.away_team.scores += game.score_away
+        game.away_team.opponent_points += game.score_home
 
 def season_update(season):
     if season.week < len(season.season_schedule):
@@ -125,15 +132,15 @@ def season_update(season):
 
 def weekly_update(league, season):
     simulate_week(season)
-    for game in season.season_schedule[season.week - 1]:
-        team_updates(game)
+    team_updates(season)
+    update_rivalry(league, season)
     update_standings(league)
-    for team in league.all_teams:
-        prestige_update(league, team)
+    prestige_update(league)
     playoff_standing_update(league, season)
     season_update(season)
-    update_headlines(season)
     if not season.playoff:
+        update_rivalry_week(league, season)
+        update_headlines(season)
         create_times(season)
 
         return "weekly_results_new"
