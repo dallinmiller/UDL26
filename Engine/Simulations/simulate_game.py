@@ -5,32 +5,32 @@ def rating_variation(game):
     variations = []
     for team in teams:
         if team.season_status == "Confident":
-            variations.append([2, 0])
+            variations.append(game.scoring_settings.confident_scoring)
         elif team.season_status == "Calm":
-            variations.append([0, 0])
+            variations.append(game.scoring_settings.calm_scoring)
         elif team.season_status == "Anxious":
-            variations.append([-2, 4])
+            variations.append(game.scoring_settings.anxious_scoring)
         elif team.season_status == "Desperate":
-            variations.append([-4, 7])
+            variations.append(game.scoring_settings.desperate_scoring)
         else:
-            variations.append([-5, 2])
+            variations.append(game.scoring_settings.defeated_scoring)
 
     if game.match_time == "6:00":
         for team in variations:
-            team[1] += 1
+            team[1] += game.scoring_settings.primetime_variation_bonus
 
     elif game.match_time == "12:00":
         for team in variations:
-            team[1] += 0.5
+            team[1] += game.scoring_settings.noon_variation_bonus
 
     return variations
 
 def simulate_prep(game):
     variation = rating_variation(game)
-    home_rating = 16 + variation[0][0]
-    home_variability = 3 + variation[0][1]
-    away_rating = 15 + variation[1][0]
-    away_variability = 3 + variation[1][1]
+    home_rating = game.scoring_settings.home_base_score + variation[0][0]
+    home_variability = game.scoring_settings.home_base_variation + variation[0][1]
+    away_rating = game.scoring_settings.away_base_score + variation[1][0]
+    away_variability = game.scoring_settings.away_base_variation + variation[1][1]
 
     return home_rating, home_variability, away_rating, away_variability
 
@@ -44,10 +44,10 @@ def simulate(game):
         game.winner = "away"
     game.score_home = round(game.score_home)
     game.score_away = round(game.score_away)
-    if game.score_home < 5:
-        game.score_home = 5
-    if game.score_away < 5:
-        game.score_away = 5
+    if game.score_home < game.scoring_settings.min_score:
+        game.score_home = game.scoring_settings.min_score
+    if game.score_away < game.scoring_settings.min_score:
+        game.score_away = game.scoring_settings.min_score
     if game.score_home == game.score_away:
         game.overtime = True
         if game.winner == "home":

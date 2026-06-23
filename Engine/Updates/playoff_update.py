@@ -37,10 +37,10 @@ def weekly_update_playoff(league, season):
     if not season.complete:
         if season.playoff_week == 2:
             create_conference_finals_schedule(league, season)
-            create_times_conference_playoffs(season, 1)
+            create_times_conference_playoffs(league, season, 1)
         elif season.playoff_week == 3:
             create_semifinals_schedule(league, season)
-            create_times_semifinals_playoffs(season)
+            create_times_semifinals_playoffs(league, season)
         elif season.playoff_week == 4:
             create_finals_schedule(league, season)
         else:

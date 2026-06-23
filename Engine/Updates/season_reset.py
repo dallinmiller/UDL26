@@ -9,7 +9,7 @@ def reset_season(league, season):
     season.season_number += 1
     season.week = 1
     season.season_schedule = create_schedule(league, season)
-    create_times(season)
+    create_times(league, season)
 
     season.season_results = []
     season.playoff_schedule = []

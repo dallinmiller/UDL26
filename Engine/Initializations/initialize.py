@@ -14,6 +14,6 @@ def initialization():
     init_rivalries(league)
     initialize_user(league)
     season.season_schedule = create_schedule(league, season)
-    create_times(season)
+    create_times(league, season)
     update_headlines(season)
     return league, season

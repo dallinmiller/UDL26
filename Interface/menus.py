@@ -5,14 +5,6 @@ from History.histories import league_histories
 
 def main_menu(league, season):
     upcoming_week(season, False,None)
-    team_id_2 = None
-    for game in season.season_schedule[season.week - 1]:
-        if game.home_team == league.user_team:
-            team_id_2 = game.away_team.league_index
-        elif game.away_team == league.user_team:
-            team_id_2 = game.home_team.league_index
-    key = tuple(sorted((14, team_id_2)))
-    print(f"This week's rivalry score: {league.rivalries[key]}")
 
     print("\n-----HEADLINES-----\n")
     for headline in season.headlines:

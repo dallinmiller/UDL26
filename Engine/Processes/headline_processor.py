@@ -3,10 +3,15 @@ from Interface.utility_functions import *
 from History.histories import league_histories
 import random
 from difflib import SequenceMatcher
+import math
 
 def headline_harvest(season):
     headlines = []
     return_type = "game"
+
+    section_1 = math.ceil(len(season.season_schedule) / 5)
+    section_2 = math.ceil(2 * len(season.season_schedule) / 5)
+    section_3 = math.ceil(3 * len(season.season_schedule) / 5)
 
     if season.week == 1 and season.season_number != 1:
         return_type = "team"
@@ -30,7 +35,7 @@ def headline_harvest(season):
         headlines.append(third_week_headlines())
     if season.week == 4:
         headlines.append(fourth_week_headlines())
-    if season.week == 14:
+    if season.week == len(season.season_schedule):
         headlines.append(final_week_headlines())
 
     for game in season.season_results[season.week - 2]:
@@ -41,14 +46,14 @@ def headline_harvest(season):
 
         team_status = ["None", "None"]
 
-        if 3 <= season.week < 6:
+        if section_1 <= season.week < section_2:
             for team_index, team in enumerate(teams):
                 if team.standing <= 8:
                     team_status[team_index] = "contender"
                 else:
                     team_status[team_index] = "middler"
 
-        elif season.week >= 6:
+        elif season.week >= section_2:
             for team_index, team in enumerate(teams):
                 if team.standing <= 3:
                     team_status[team_index] = "top_team"
@@ -155,12 +160,12 @@ def headline_harvest(season):
             if game_winner.lose_streak == 3:
                 headlines.append(fourth_week_headlines(game, 2))
         ### TODO: Test pre-playoff conditions
-        if season.week >= 9 and not season.playoff:
+        if season.week >= section_3 and not season.playoff:
             if team_status[0] == "contender" or team_status[0] == "top_team":
                 headlines.append(down_the_stretch_headlines(game, 1))
             if team_status[0] == "middler" and not game_winner.playoff_eliminated:
                 headlines.append(down_the_stretch_headlines(game, 2))
-        if season.week == 14 and not season.playoff:
+        if season.week == len(season.season_schedule) and not season.playoff:
             if game_loser.playoff_near_eliminated:
                 headlines.append(final_week_headlines(game, 2))
         if season.playoff_week == 1 and season.playoff:
@@ -182,14 +187,14 @@ def headline_harvest(season):
 
             team_status = ["None", "None"]
 
-            if 3 <= season.week < 6:
+            if section_1 <= season.week < section_2:
                 for team_index, team in enumerate(teams):
                     if team.standing <= 8:
                         team_status[team_index] = "contender"
                     else:
                         team_status[team_index] = "middler"
 
-            elif season.week >= 6:
+            elif season.week >= section_2:
                 for team_index, team in enumerate(teams):
                     if team.standing <= 3:
                         team_status[team_index] = "top_team"
@@ -201,15 +206,13 @@ def headline_harvest(season):
                         team_status[team_index] = "bottom"
 
             if game.rivalry:
-                print(f"{game_home.city} rivalry with {game_away.city}")
-                get_continue()
                 headlines.append(rivalry_headlines(game, 0))
             if game.tight_race:
                 headlines.append(tight_race_headlines(game, 0))
-            if season.week >= 9 and not season.playoff:
+            if season.week >= section_3 and not season.playoff:
                 if team_status == ["top_team", "top_team"] or set(team_status) == {"top_team", "contender"}:
                     headlines.append(down_the_stretch_headlines(game, 0))
-            if season.week == 14:
+            if season.week == len(season.season_schedule):
                 if (not game_home.playoff_eliminated and not game_home.playoff_clinched and not
                 game_away.playoff_eliminated and not game_away.playoff_clinched):
                     headlines.append(final_week_headlines(game, 1))

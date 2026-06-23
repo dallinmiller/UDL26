@@ -1,26 +1,28 @@
 import random
 
-def create_times(season):
+def create_times(league, season):
     for match in season.season_schedule[season.week - 1]:
         match_prestige = match.home_team.prestige + match.away_team.prestige
-        match_prestige *= random.normalvariate(1, 0.08)
+        if match.rivalry:
+            match_prestige += league.match_time_settings.rivalry_bonus
+        if match.tight_race:
+            match_prestige += league.match_time_settings.tight_race_bonus
+        if match.playoff_implication:
+            match_prestige += league.match_time_settings.playoff_implication_bonus
+        match_prestige *= random.normalvariate(1, league.match_time_settings.prestige_rand)
         match.prestige = match_prestige
 
     season.season_schedule[season.week - 1].sort(key=lambda game: game.prestige, reverse=True)
 
-    season.season_schedule[season.week - 1][0].match_time = "6:00"
-    season.season_schedule[season.week - 1][1].match_time = "12:00"
-    season.season_schedule[season.week - 1][2].match_time = "2:30"
-    season.season_schedule[season.week - 1][3].match_time = "1:00"
-    season.season_schedule[season.week - 1][4].match_time = "4:00"
-    season.season_schedule[season.week - 1][5].match_time = "1:00"
-    season.season_schedule[season.week - 1][6].match_time = "4:00"
-    season.season_schedule[season.week - 1][7].match_time = "2:30"
+    for i, game in enumerate(season.season_schedule[season.week - 1]):
+        game.match_time = league.match_time_settings.match_times[i]
 
-def create_times_conference_playoffs(season, week_index=0):
+def create_times_conference_playoffs(league, season, week_index=0):
     for match in season.playoff_schedule[week_index]:
         match_prestige = match.home_team.prestige + match.away_team.prestige
-        match_prestige *= random.normalvariate(1, 0.08)
+        if match.rivalry:
+            match_prestige += league.match_time_settings.rivalry_bonus
+        match_prestige *= random.normalvariate(1, league.match_time_settings.prestige_rand)
         match.prestige = match_prestige
 
     season.playoff_schedule[week_index].sort(key=lambda game: game.prestige, reverse=True)
@@ -30,10 +32,12 @@ def create_times_conference_playoffs(season, week_index=0):
     season.playoff_schedule[week_index][2].match_time = "4:00"
     season.playoff_schedule[week_index][3].match_time = "1:00"
 
-def create_times_semifinals_playoffs(season):
+def create_times_semifinals_playoffs(league, season):
     for match in season.playoff_schedule[2]:
         match_prestige = match.home_team.prestige + match.away_team.prestige
-        match_prestige *= random.normalvariate(1, 0.08)
+        if match.rivalry:
+            match_prestige += league.match_time_settings.rivalry_bonus
+        match_prestige *= random.normalvariate(1, league.match_time_settings.prestige_rand)
         match.prestige = match_prestige
 
     season.playoff_schedule[2].sort(key=lambda game: game.prestige, reverse=True)

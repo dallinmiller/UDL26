@@ -9,7 +9,7 @@ def playoff_initialization(league, season):
     }
 
     create_conference_semis_schedule(league, season)
-    create_times_conference_playoffs(season)
+    create_times_conference_playoffs(league, season)
 
     season.playoff_week = 1
 

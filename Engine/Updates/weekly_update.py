@@ -7,8 +7,6 @@ from Engine.Processes.headline_processor import update_headlines
 from Interface.utility_functions import *
 
 def get_prestige_info(league, team):
-    league_rank = league.all_teams.index(team) + 1
-
     conference_leader = False
 
     for conference in league.conferences.values():
@@ -40,22 +38,27 @@ def get_prestige_info(league, team):
     if stats_table[15][0] == team:
         oppg_leader = True
 
-    return league_rank, conference_leader, ppg_leader, oppg_leader
+    return conference_leader, ppg_leader, oppg_leader
 
 def prestige_update(league):
     for team in league.all_teams:
-        rank, conference_leader, ppg_leader, oppg_leader = get_prestige_info(league, team)
-        if rank <= 8:
-            prestige = 4 - (1 / 8) * rank
+        conference_leader, ppg_leader, oppg_leader = get_prestige_info(league, team)
+        if team.standing <= len(league.league) / 3:
+            prestige = 4 - 3 * team.standing / len(league.league)
         else:
-            prestige = 3 - (3 / 64) * (rank - 8) ** 2
+            pres_A = 27 / (2 * len(league.league) ** 3)
+            pres_B = -99 / (4 * len(league.league) ** 2)
+            pres_C = 9 / len(league.league)
+            pres_D = 9 / 4
+
+            prestige = pres_A * team.standing ** 3 + pres_B * team.standing ** 2 + pres_C * team.standing + pres_D
 
         if conference_leader:
-            prestige += 0.5
+            prestige += league.match_time_settings.conference_leader_bonus
         if ppg_leader:
-            prestige += 0.5
+            prestige += league.match_time_settings.ppg_leader_bonus
         if oppg_leader:
-            prestige += 0.5
+            prestige += league.match_time_settings.oppg_leader_bonus
 
         team.prestige = prestige
 
@@ -141,7 +144,7 @@ def weekly_update(league, season):
     if not season.playoff:
         update_rivalry_week(league, season)
         update_headlines(season)
-        create_times(season)
+        create_times(league, season)
 
         return "weekly_results_new"
     else:

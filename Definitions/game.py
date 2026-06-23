@@ -22,3 +22,22 @@ class Game:
         self.overtime = False
         self.played = "False"
         self.winner = "None"
+
+        self.scoring_settings = ScoringParameters()
+
+class ScoringParameters:
+    def __init__(self):
+        self.home_base_score = 16
+        self.home_base_variation = 3
+        self.away_base_score = 15
+        self.away_base_variation = 3
+
+        self.min_score = 5
+
+        self.confident_scoring = [2, 0]
+        self.calm_scoring = [0, 0]
+        self.anxious_scoring = [-2, 4]
+        self.desperate_scoring = [-4, 7]
+        self.defeated_scoring = [-5, 2]
+        self.primetime_variation_bonus = 1
+        self.noon_variation_bonus = 0.5

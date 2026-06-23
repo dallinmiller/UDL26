@@ -69,7 +69,8 @@ def inter_conference_round_robin(conference_1_key, conference_2_key, league):
 
 # The schedule is created here. Conference schedules are created, and then inter-division non-conference schedules are
 # created. Each conference plays one non-division conference which alternates each year. The non-division schedules are
-# created. The schedule is shuffled randomly by week, and then packaged as a single schedule.
+# created. The schedule is shuffled randomly by week, and then packaged as a single schedule. Currently only supports 
+# 4 conference leagues.
 #
 # Schedules can be called as follows:
 # schedule[Week_num][Game(class)]
@@ -94,9 +95,14 @@ def create_schedule(league, season):
         for conf in conference_weeks:
             week += conf[week_index]
         schedule.append(week)
+        
+    conf_1 = league.conf_names[0]
+    conf_2 = league.conf_names[1]
+    conf_3 = league.conf_names[2]
+    conf_4 = league.conf_names[3]
 
-    pairs_1 = [("aac", "cmc"), ("mnc", "owc")]
-    pairs_2 = [("aac", "owc"), ("cmc", "mnc")] if even else [("aac", "mnc"), ("cmc", "owc")]
+    pairs_1 = [(conf_1, conf_2), (conf_3, conf_4)]
+    pairs_2 = [(conf_1, conf_4), (conf_2, conf_3)] if even else [(conf_1, conf_3), (conf_2, conf_4)]
 
     for conf_a, conf_b in pairs_1:
         inter_weeks = inter_conference_round_robin(conf_a, conf_b, league)
@@ -119,21 +125,28 @@ def create_schedule(league, season):
     return schedule
 
 def conference_division_locater(league, team, conf_or_div="conf"):
+    conf_1 = league.conf_names[0]
+    conf_2 = league.conf_names[1]
+    conf_3 = league.conf_names[2]
+    conf_4 = league.conf_names[3]
+    div_1 = league.div_names[0]
+    div_2 = league.div_names[1]
+
     if conf_or_div == "conf":
-        if team in league.conferences["aac"]:
+        if team in league.conferences[conf_1]:
             return 0
-        elif team in league.conferences["cmc"]:
+        elif team in league.conferences[conf_2]:
             return 1
-        elif team in league.conferences["mnc"]:
+        elif team in league.conferences[conf_3]:
             return 2
-        elif team in league.conferences["owc"]:
+        elif team in league.conferences[conf_4]:
             return 3
         else:
             raise ValueError(f"Unknown team {team.city}")
     else:
-        if team in league.divisions["front"]:
+        if team in league.divisions[div_1]:
             return 0
-        elif team in league.divisions["back"]:
+        elif team in league.divisions[div_2]:
             return 1
         else:
             raise ValueError(f"Unknown team {team.city}")
@@ -154,6 +167,11 @@ def create_conference_semis_schedule(league, season):
     season.playoff_schedule.append(conference_semis_schedule)
 
 def create_conference_finals_schedule(league, season):
+    conf_1 = league.conf_names[0]
+    conf_2 = league.conf_names[1]
+    conf_3 = league.conf_names[2]
+    conf_4 = league.conf_names[3]
+    
     conference_finals_schedule = []
     conference_semifinal_winners = []
 
@@ -166,10 +184,10 @@ def create_conference_finals_schedule(league, season):
     conference_semifinal_winners.sort(key=lambda x: x[1])
 
     league.conference_final_teams = league.playoff_teams
-    league.conference_final_teams["aac"] = [league.playoff_teams["aac"][0], conference_semifinal_winners[0][0]]
-    league.conference_final_teams["cmc"] = [league.playoff_teams["cmc"][0], conference_semifinal_winners[1][0]]
-    league.conference_final_teams["mnc"] = [league.playoff_teams["mnc"][0], conference_semifinal_winners[2][0]]
-    league.conference_final_teams["owc"] = [league.playoff_teams["owc"][0], conference_semifinal_winners[3][0]]
+    league.conference_final_teams[conf_1] = [league.playoff_teams[conf_1][0], conference_semifinal_winners[0][0]]
+    league.conference_final_teams[conf_2] = [league.playoff_teams[conf_2][0], conference_semifinal_winners[1][0]]
+    league.conference_final_teams[conf_3] = [league.playoff_teams[conf_3][0], conference_semifinal_winners[2][0]]
+    league.conference_final_teams[conf_4] = [league.playoff_teams[conf_4][0], conference_semifinal_winners[3][0]]
     
     for conference in league.conference_final_teams.values():
         conference_finals_schedule.append(
@@ -194,8 +212,8 @@ def create_semifinals_schedule(league, season):
     conference_final_winners.sort(key=lambda x: x[1])
             
     league.semifinal_teams = {
-        "front": [conference_final_winners[0][0], conference_final_winners[1][0]],
-        "back": [conference_final_winners[2][0], conference_final_winners[3][0]]
+        league.div_names[0]: [conference_final_winners[0][0], conference_final_winners[1][0]],
+        league.div_names[1]: [conference_final_winners[2][0], conference_final_winners[3][0]]
     }
     
     for division in league.semifinal_teams.values():
